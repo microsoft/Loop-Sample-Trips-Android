@@ -36,8 +36,7 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
 
         this.trips.clear();
 
-        for (Trip trip: data)
-        {
+        for (Trip trip: data) {
             if (trip.isValid()) {
                 this.trips.add(trip);
             }
@@ -59,23 +58,19 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
         View row = convertView;
         TripHolder holder = null;
 
-        if(row == null)
-        {
+        if(row == null) {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
-
             holder = new TripHolder();
             holder.txtTitle = (TextView)row.findViewById(R.id.txtTitle);
             holder.txtDistance = (TextView)row.findViewById(R.id.txtdistance);
             holder.txtTime = (TextView)row.findViewById(R.id.txtTime);
             holder.txtTotalTime = (TextView)row.findViewById(R.id.txtTotalTime);
-            holder.existOnServer = (TextView)row.findViewById(R.id.exitsonserver);
 
             row.setTag(holder);
             row.setClickable(true);
         }
-        else
-        {
+        else {
             holder = (TripHolder)row.getTag();
         }
 
@@ -103,17 +98,14 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
         return row;
     }
 
-    static class TripHolder
-    {
+    static class TripHolder {
         TextView txtTitle;
         TextView txtDistance;
         TextView txtTime;
         TextView txtTotalTime;
-        TextView existOnServer;
     }
 
     public String getTripLocationInfo(Trip trip) {
-
         String start = TextUtils.isEmpty(trip.startLocale.getFriendlyName()) ? "Unknown" : trip.startLocale.getFriendlyName();
         String end = TextUtils.isEmpty(trip.endLocale.getFriendlyName()) ? "Unknown" : trip.endLocale.getFriendlyName();
         return String.format("%s to %s",start, end);
@@ -124,17 +116,11 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
         return String.format("%.2f km",dist);
     }
 
-    public String getTripDistanceTime(Trip trip) {
-        Double dur = trip.getDurationMinutes();
-        return String.format("%.2f mins", dur);
-    }
-
     public String getTripTimeInfo(Trip trip) {
         SimpleDateFormat format = new SimpleDateFormat("EEE dd HH:mm:ss");
         String start = format.format(trip.startedAt);
         String end = format.format(trip.endedAt);
         Double dur = trip.getDurationMinutes();
-
         return String.format("%s - %s (%.2f mins)", start, end, dur);
     }
 }

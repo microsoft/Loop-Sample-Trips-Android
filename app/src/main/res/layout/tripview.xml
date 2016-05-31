@@ -68,33 +68,17 @@
                 android:textColor="#000000"
                 />
 
-            <TextView android:id="@+id/exitsonserver"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
-                android:textSize="12dp"
-                android:textStyle="bold"
+                android:id="@+id/Showonmap"
+                android:textSize="14dp"
                 android:textColor="#0000A0"
-                android:text="Synced"/>
+                android:textStyle="bold"
+                android:text="See on Map"/>
 
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/Showonmapcontainer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:id="@+id/Showonmap"
-            android:textSize="14dp"
-            android:textColor="#0000A0"
-            android:textStyle="bold"
-            android:text="See on Map"/>
     </RelativeLayout>
 </LinearLayout>

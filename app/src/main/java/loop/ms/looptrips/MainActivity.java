@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         trips = Trips.createAndLoad(Trips.class, Trip.class);
         tripsViewAdapter = new TripsViewAdapter(this,
                 R.layout.tripview, new ArrayList<Trip>(trips.itemList.values()));
@@ -76,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        tripListView.setAdapter(tripsViewAdapter);
 
         if (LoopSDK.isInitialized()) {
             LoopSDK.forceSync();
