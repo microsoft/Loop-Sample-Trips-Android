@@ -1,5 +1,9 @@
 package loop.ms.looptrips;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import ms.loop.loopsdk.core.LoopSDK;
+import ms.loop.loopsdk.profile.Drive;
+import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
 import ms.loop.loopsdk.profile.Trip;
@@ -18,26 +24,27 @@ import ms.loop.loopsdk.util.LoopError;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Trips trips;
+    private Drives drives;
     private TripsViewAdapter tripsViewAdapter;
     private ListView tripListView;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        trips = Trips.createAndLoad(Trips.class, Trip.class);
+        drives = Drives.createAndLoad(Drives.class, Drive.class);
         tripsViewAdapter = new TripsViewAdapter(this,
-                R.layout.tripview, new ArrayList<Trip>(trips.itemList.values()));
+                R.layout.tripview, new ArrayList<Trip>(drives.itemList.values()));
 
         tripListView = (ListView)findViewById(R.id.tripslist);
-        trips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback()
+        drives.registerItemChangedCallback("Trips", new IProfileItemChangedCallback()
         {
             @Override
             public void onItemChanged(String entityId) {
 
                // trips.load();
-                final Map<String, Trip> itemList = trips.itemList;
+                final Map<String, Drive> itemList = drives.itemList;
 
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -54,20 +61,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tripListView.setAdapter(tripsViewAdapter);
-        if (LoopSDK.isInitialized()) {
-            LoopSDK.forceSync();
-            download(true);
-        }
+
+        IntentFilter intentFilter = new IntentFilter("android.intent.action.onInitialized");
+
+        mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (LoopSDK.isInitialized()) {
+                    LoopSDK.forceSync();
+                    download(true);
+                }
+            }
+        };
+        //registering our receiver
+        this.registerReceiver(mReceiver, intentFilter);
     }
 
     public void download(boolean overwrite) {
-        trips.download(overwrite, new IProfileDownloadCallback() {
+        drives.download(overwrite, new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        tripsViewAdapter.update(new ArrayList<Trip>(trips.itemList.values()));
+                        tripsViewAdapter.update(new ArrayList<Trip>(drives.itemList.values()));
                     }
                 });
             }
@@ -97,5 +115,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        this.unregisterReceiver(mReceiver);
     }
 }

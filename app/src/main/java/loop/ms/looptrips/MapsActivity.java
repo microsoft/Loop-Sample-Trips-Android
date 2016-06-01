@@ -17,6 +17,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import ms.loop.loopsdk.profile.Drive;
+import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.GeospatialPoint;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
@@ -24,7 +26,7 @@ import ms.loop.loopsdk.profile.Trips;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Trips trips;
+    private Drives trips;
     private String entityId;
 
     @Override
@@ -36,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        trips = Trips.createAndLoad(Trips.class, Trip.class);
+        trips = Drives.createAndLoad(Drives.class, Drive.class);
         entityId = this.getIntent().getExtras().getString("tripid");
     }
 
