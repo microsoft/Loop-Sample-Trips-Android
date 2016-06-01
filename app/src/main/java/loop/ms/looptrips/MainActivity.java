@@ -1,29 +1,15 @@
 package loop.ms.looptrips;
 
-import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import ms.loop.loopsdk.core.LoopSDK;
-import ms.loop.loopsdk.profile.GeoCoder;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
 import ms.loop.loopsdk.profile.Trip;
@@ -47,12 +33,10 @@ public class MainActivity extends AppCompatActivity {
         tripListView = (ListView)findViewById(R.id.tripslist);
         trips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback()
         {
-
             @Override
             public void onItemChanged(String entityId) {
 
-
-                trips.load();
+               // trips.load();
                 final Map<String, Trip> itemList = trips.itemList;
 
                 runOnUiThread(new Runnable() {
@@ -60,27 +44,20 @@ public class MainActivity extends AppCompatActivity {
                         tripsViewAdapter.update(new ArrayList<Trip>(itemList.values()));
                     }
                 });
-
             }
 
             @Override
-            public void onItemAdded(String entityId) {
-
-            }
+            public void onItemAdded(String entityId) {}
 
             @Override
-            public void onItemRemoved(String entityId) {
-
-            }
+            public void onItemRemoved(String entityId) {}
         });
 
         tripListView.setAdapter(tripsViewAdapter);
-
         if (LoopSDK.isInitialized()) {
             LoopSDK.forceSync();
             download(true);
         }
-
     }
 
     public void download(boolean overwrite) {

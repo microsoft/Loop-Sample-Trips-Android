@@ -8,6 +8,7 @@ import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
+import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
 
 /**
@@ -23,12 +24,12 @@ public class SampleApplication extends MultiDexApplication implements ILoopSDKCa
         super.onCreate();
 
         //replace appId and device id below
-        String appId = "";
-        String appToken = "";
+        String appId = "Your App Id";
+        String appToken = "Your App Token";
 
         //replace your user id and device id
-        String userId = "";
-        String deviceId = "";
+        String userId = "Your User Id";
+        String deviceId = "Your Device Id";
 
         LoopSDK.initialize(this, appId, appToken, userId, deviceId);
     }
