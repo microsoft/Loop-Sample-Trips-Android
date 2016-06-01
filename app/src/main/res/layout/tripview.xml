@@ -12,17 +12,38 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/RelativeLayout01"
         android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/RelativeLayout05"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        >
+        android:layout_alignParentLeft="true">
+
+        <!-- icon -->
+        <ImageView
+            android:id="@+id/item_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="-5dp"
+            android:src="@drawable/trips"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_toEndOf="@id/item_icon"
             android:id="@+id/txtTitle"
             android:textSize="16dp"
             android:textStyle="bold"
             android:textColor="#000000"/>
+
+    </RelativeLayout>>
+
 
         <TextView
             android:layout_width="wrap_content"
