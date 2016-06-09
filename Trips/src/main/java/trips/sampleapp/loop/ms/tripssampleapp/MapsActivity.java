@@ -48,24 +48,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         drives = Drives.createAndLoad(Drives.class, Drive.class);
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         drawPath();
     }
 
@@ -83,13 +68,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .color(Color.BLUE)
                 .geodesic(true).clickable(true);
 
-
-
         mMap.addMarker(new MarkerOptions().position(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees)).title("Trip starts"));
         LatLng latLng = new LatLng(firstPoint.latDegrees, firstPoint.longDegrees);
         for (GeospatialPoint point: trip.path.points)
         {
-            if (point.accuracyMeters > 200) continue;
             latLng = new LatLng(point.latDegrees,point.longDegrees);
             mMap.addCircle(new CircleOptions()
                     .center(latLng)
@@ -102,11 +84,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.addPolyline(options);
 
-
         // mMap.addPolyline( options );
         mMap.addMarker(new MarkerOptions().position(latLng).title("Trip ends"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
-
     }
 }

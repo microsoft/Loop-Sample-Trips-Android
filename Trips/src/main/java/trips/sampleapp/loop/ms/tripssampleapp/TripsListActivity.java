@@ -11,7 +11,9 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,51 +35,26 @@ import trips.sampleapp.loop.ms.tripssampleapp.model.ServerTrips;
 public class TripsListActivity extends AppCompatActivity {
 
     private BroadcastReceiver mReceiver;
-
     private TripsViewAdapter adapter;
-
     public static Trips localTrips;
-
-    public static boolean useServerTrips = false;
-    TextView txtTripCount;
-    TextView txtUserId;
-
     private ListView tripListView;
 
+    private Switch locationSwitch;
+    private TextView locationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips_list);
 
-
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
-
         adapter = new TripsViewAdapter(this,
                 R.layout.tripview, new ArrayList<Trip>(localTrips.itemList.values()));
 
         tripListView = (ListView)findViewById(R.id.tripslist);
-
-        View header = (View)getLayoutInflater().inflate(R.layout.tripsheader, null);
-        tripListView.addHeaderView(header);
-
-        txtUserId = (TextView)header.findViewById(R.id.userid);
-        txtUserId.setText("UserId: "+ LoopSDK.userId);
-        txtUserId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                clipboard.setText(LoopSDK.userId);
-                Toast.makeText(TripsListActivity.this, "Id copied to clipboard", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        txtTripCount = (TextView)header.findViewById(R.id.tripCount);
-        txtTripCount.setText("Trips: "+adapter.getCount());
         tripListView.setAdapter(adapter);
 
         localTrips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback() {
-
             @Override
             public void onItemChanged(String entityId) {
                 updateTripsInUI();
@@ -89,25 +66,32 @@ public class TripsListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemRemoved(String entityId) {
-
-            }
+            public void onItemRemoved(String entityId) {}
         });
 
         IntentFilter intentFilter = new IntentFilter("android.intent.action.onInitialized");
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                txtUserId.setText("UserId: "+LoopSDK.userId);
-                updateTripsInUI();
+                loadTrips();
             }
         };
         //registering our receiver
         this.registerReceiver(mReceiver, intentFilter);
 
-        if (LoopSDK.isInitialized()) {
-            //LoopSDK.forceSync();
-        }
+        locationSwitch = (Switch) this.findViewById(R.id.locationswitch);
+        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                boolean isLocationOn = SampleAppApplication.isLocationTurnedOn(TripsListActivity.this);
+                if (isChecked && !isLocationOn)
+                    SampleAppApplication.openLocationServiceSettingPage(TripsListActivity.this);
+
+                else if (!isChecked && isLocationOn)
+                    SampleAppApplication.openLocationServiceSettingPage(TripsListActivity.this);
+            }
+        });
+        locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
     }
 
     public void onResume() {
@@ -129,7 +113,6 @@ public class TripsListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(trips);
-                txtTripCount.setText("Trips: "+adapter.getCount());
                 SampleAppApplication.setPeopleProperty("Trips", adapter.getCount());
             }
         });
@@ -160,7 +143,6 @@ public class TripsListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 

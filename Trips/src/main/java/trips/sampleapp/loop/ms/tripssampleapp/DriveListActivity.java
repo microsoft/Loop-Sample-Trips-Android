@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,7 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,15 +48,13 @@ import trips.sampleapp.loop.ms.tripssampleapp.model.ServerDrives;
 public class DriveListActivity extends AppCompatActivity {
 
     private BroadcastReceiver mReceiver;
-
-    TripsViewAdapter adapter;
-    public static Drives localDrives;// = Trips.createAndLoad(Trips.class, Trip.class);
-    TextView txtTripCount;
-    TextView txtUserId;
-
+    private TripsViewAdapter adapter;
     private ListView tripListView;
-    private long tripStartTime;
 
+    private Switch locationSwitch;
+    private TextView locationText;
+
+    public static Drives localDrives;// = Trips.createAndLoad(Trips.class, Trip.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +68,9 @@ public class DriveListActivity extends AppCompatActivity {
                 R.layout.tripview, drives);
 
         tripListView = (ListView)findViewById(R.id.tripslist);
-        View header = (View)getLayoutInflater().inflate(R.layout.tripsheader, null);
-        tripListView.addHeaderView(header);
-
-
-
-        txtTripCount = (TextView)header.findViewById(R.id.tripCount);
-        txtTripCount.setText("Drives: "+adapter.getCount());
         tripListView.setAdapter(adapter);
 
-        localDrives.registerItemChangedCallback("Drives", new IProfileItemChangedCallback()
-        {
+        localDrives.registerItemChangedCallback("Drives", new IProfileItemChangedCallback() {
             @Override
             public void onItemChanged(String entityId) {
                 updateDrivesInUI();
@@ -94,23 +88,36 @@ public class DriveListActivity extends AppCompatActivity {
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                txtUserId.setText("UserId: "+LoopSDK.userId);
                loadDrives();
             }
         };
         //registering our receiver
         this.registerReceiver(mReceiver, intentFilter);
+
+        locationSwitch = (Switch) this.findViewById(R.id.locationswitch);
+        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                boolean isLocationOn = SampleAppApplication.isLocationTurnedOn(DriveListActivity.this);
+                if (isChecked && !isLocationOn)
+                    SampleAppApplication.openLocationServiceSettingPage(DriveListActivity.this);
+
+                else if (!isChecked && isLocationOn)
+                    SampleAppApplication.openLocationServiceSettingPage(DriveListActivity.this);
+            }
+        });
+        locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadDrives();
+        checkLocationEnabled();
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         this.unregisterReceiver(mReceiver);
     }
@@ -122,7 +129,6 @@ public class DriveListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(drives);
-                txtTripCount.setText("Drives: "+adapter.getCount());
                 SampleAppApplication.setPeopleProperty("Drives", adapter.getCount());
             }
         });
@@ -217,5 +223,15 @@ public class DriveListActivity extends AppCompatActivity {
     public static List<Trip> getSortedDrives(List<Trip> drives) {
         Collections.sort(drives, CreatedByComparator);
         return drives;
+    }
+
+    public void checkLocationEnabled() {
+        if (SampleAppApplication.isLocationTurnedOn(this)) {
+            locationText.setText("Location Tracking Enabled!");
+            locationSwitch.setChecked(true);
+        } else {
+            locationText.setText("Enable Location Tracking!");
+            locationSwitch.setChecked(false);
+        }
     }
 }

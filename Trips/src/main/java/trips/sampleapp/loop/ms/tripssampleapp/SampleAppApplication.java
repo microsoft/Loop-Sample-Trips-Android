@@ -4,7 +4,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 import android.util.Patterns;
 
@@ -182,5 +184,29 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             }
         }
         return possibleEmail;
+    }
+
+    public static boolean isLocationTurnedOn(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean locationEnbaled = false;
+
+        try {
+            locationEnbaled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if (locationEnbaled) {
+                locationEnbaled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            }
+        } catch (Exception ex) {
+        }
+        return locationEnbaled;
+    }
+
+    public static void openLocationServiceSettingPage(Context context)
+    {
+        final Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        locationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (locationIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(locationIntent);
+        }
     }
 }

@@ -22,7 +22,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".DriveListActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:label="Drives">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
