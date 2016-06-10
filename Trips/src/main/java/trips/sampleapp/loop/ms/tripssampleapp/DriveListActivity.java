@@ -63,7 +63,7 @@ public class DriveListActivity extends AppCompatActivity {
 
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
 
-        List<Trip> drives = getSortedDrives(new ArrayList<Trip>(localDrives.itemList.values()));
+        List<Trip> drives = new ArrayList<Trip>(localDrives.getSortedItems());
         adapter = new TripsViewAdapter(this,
                 R.layout.tripview, drives);
 
@@ -125,7 +125,7 @@ public class DriveListActivity extends AppCompatActivity {
     public void updateDrivesInUI()
     {
         localDrives.load();
-        final List<Trip> drives = getSortedDrives(new ArrayList<Trip>(localDrives.itemList.values()));
+        final List<Trip> drives = new ArrayList<Trip>(localDrives.getSortedItems());
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(drives);
@@ -137,7 +137,7 @@ public class DriveListActivity extends AppCompatActivity {
     public void loadDrives()
     {
         if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId)) {
-           // LoopSDK.forceSync();
+            LoopSDK.forceSync();
             download(true);
         }
         if (localDrives.itemList.size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
@@ -185,7 +185,7 @@ public class DriveListActivity extends AppCompatActivity {
         }
 
         if (id == R.id.send_signals) {
-            //LoopSDK.forceSync();
+            LoopSDK.forceSync();
         }
 
         if (id == R.id.settings) {
@@ -206,23 +206,6 @@ public class DriveListActivity extends AppCompatActivity {
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
         });
-    }
-
-    public static Comparator<Trip> CreatedByComparator = new Comparator<Trip>() {
-        public int compare(Trip item1, Trip item2) {
-            Date createdAt1 = item1.createdAt;
-            Date createdAt2 = item2.createdAt;
-
-            //ascending order
-            if (createdAt1 == null || createdAt2 == null)
-                return 1;
-            return createdAt2.compareTo(createdAt1);
-        }
-    };
-
-    public static List<Trip> getSortedDrives(List<Trip> drives) {
-        Collections.sort(drives, CreatedByComparator);
-        return drives;
     }
 
     public void checkLocationEnabled() {

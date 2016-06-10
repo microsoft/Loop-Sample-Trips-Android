@@ -53,17 +53,15 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
+
         String appId = "shuaib-sample-ap-dev-4a780486";
         String appToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6InNodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2IiwiYXBwS2V5IjoiZGQxMzIxZjQ3MDAzLTRmMjYtODVmOC04OWNhNTM2ODhhYjQiLCJhbGxvd2VkUm91dGVzIjpbeyJtZXRob2QiOiJwb3N0IiwicGF0aCI6Ii92Mi4wL2FwcC9zaHVhaWItc2FtcGxlLWFwLWRldi00YTc4MDQ4Ni91c2VyIn0seyJtZXRob2QiOiJkZWxldGUiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L3VzZXIifSx7Im1ldGhvZCI6InBvc3QiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L2xvZ2luIn0seyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L3VzZXIifV0sImlhdCI6MTQ2NDAyNjY5NCwiaXNzIjoiTG9vcCBBdXRoIHYyIiwic3ViIjoic2h1YWliLXNhbXBsZS1hcC1kZXYtNGE3ODA0ODYifQ.9zTjOKSf2hQLljmbJOnDZEJeSLabtWkq-V9r7H7TxHI";
 
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
-       // LoopSDK.initialize(this, appId, appToken);
-
-        LoopSDK.initialize(this, appId, appToken,"d731367c-a5fc-45c9-adc9-a30cd9c519a8","ad3be310-77cd-4031-8b44-be3722751495");
+        LoopSDK.initialize(this, appId, appToken);
         applicationContext = this;
         mixpanelAPI = MixpanelAPI.getInstance(applicationContext, projectToken);
         setMixpanelUser();
@@ -128,14 +126,12 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
 
 
-    public static void setPeopleProperty(String key, Object obj)
-    {
+    public static void setPeopleProperty(String key, Object obj) {
         mixpanelAPI.getPeople().set(key, obj);
         mixpanelAPI.flush();
     }
 
-    public static void trackSignal(Signal signal)
-    {
+    public static void trackSignal(Signal signal) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("createdAt", signal.createdAt);
         map.put("entityId", signal.entityId);

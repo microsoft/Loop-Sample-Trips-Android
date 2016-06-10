@@ -97,6 +97,7 @@ public class TripsListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         loadTrips();
+        checkLocationEnabled();
     }
 
     @Override
@@ -109,7 +110,7 @@ public class TripsListActivity extends AppCompatActivity {
     public void updateTripsInUI()
     {
         localTrips.load();
-        final List<Trip> trips = DriveListActivity.getSortedDrives(new ArrayList<Trip>(localTrips.itemList.values()));
+        final List<Trip> trips = localTrips.getSortedItems();
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(trips);
@@ -119,9 +120,8 @@ public class TripsListActivity extends AppCompatActivity {
     }
 
     public void loadTrips() {
-        if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId))
-        {
-            //LoopSDK.forceSync();
+        if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId)) {
+            LoopSDK.forceSync();
             download(true);
         }
         if (localTrips.itemList.size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
@@ -171,8 +171,14 @@ public class TripsListActivity extends AppCompatActivity {
         }
 
         if (id == R.id.send_signals) {
-           // LoopSDK.forceSync();
+           LoopSDK.forceSync();
         }
+        if (id == R.id.settings) {
+            Intent myIntent = new Intent(this, SettingActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            startActivity(myIntent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -194,5 +200,15 @@ public class TripsListActivity extends AppCompatActivity {
     public static Trip getTrip(String entityId)
     {
         return localTrips.byEntityId(entityId);
+    }
+
+    public void checkLocationEnabled() {
+        if (SampleAppApplication.isLocationTurnedOn(this)) {
+            locationText.setText("Location Tracking Enabled!");
+            locationSwitch.setChecked(true);
+        } else {
+            locationText.setText("Enable Location Tracking!");
+            locationSwitch.setChecked(false);
+        }
     }
 }
