@@ -48,8 +48,9 @@ public class TripsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trips_list);
 
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
+        List<Trip> trips = new ArrayList<Trip>(localTrips.sortedByStartedAt());
         adapter = new TripsViewAdapter(this,
-                R.layout.tripview, new ArrayList<Trip>(localTrips.itemList.values()));
+                R.layout.tripview, trips);
 
         tripListView = (ListView)findViewById(R.id.tripslist);
         tripListView.setAdapter(adapter);
@@ -110,7 +111,7 @@ public class TripsListActivity extends AppCompatActivity {
     public void updateTripsInUI()
     {
         localTrips.load();
-        final List<Trip> trips = localTrips.getSortedItems();
+        final List<Trip> trips = localTrips.sortedByStartedAt();
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(trips);
@@ -186,12 +187,7 @@ public class TripsListActivity extends AppCompatActivity {
         ServerTrips.Instance.download(overwrite, new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
-
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        adapter.update(new ArrayList<Trip>(localTrips.itemList.values()));
-                    }
-                });
+            updateTripsInUI();
             }
             @Override
             public void onProfileDownloadFailed(LoopError error) {}

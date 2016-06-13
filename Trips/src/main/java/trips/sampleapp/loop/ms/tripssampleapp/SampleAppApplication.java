@@ -122,7 +122,13 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onServiceStatusChanged(String provider, String status, Bundle bundle) {}
 
     @Override
-    public void onDebug(String s) {}
+    public void onDebug(String debugString) {
+
+        if (debugString.contains("receivedDrivingMotion cleared")) {
+            mixpanelAPI.track("Drive points cleared");
+        }
+
+    }
 
 
 

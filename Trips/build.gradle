@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
-        versionName "0.6.6"
+        versionName "0.6.8"
         multiDexEnabled true
     }
     dexOptions {
@@ -37,7 +37,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'ms.loop:loopsdk:2.0.0-rc17'
+    compile 'ms.loop:loopsdk:2.0.0-rc19'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'

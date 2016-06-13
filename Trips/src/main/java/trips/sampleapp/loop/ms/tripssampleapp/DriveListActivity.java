@@ -63,7 +63,7 @@ public class DriveListActivity extends AppCompatActivity {
 
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
 
-        List<Trip> drives = new ArrayList<Trip>(localDrives.getSortedItems());
+        List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
         adapter = new TripsViewAdapter(this,
                 R.layout.tripview, drives);
 
@@ -125,7 +125,7 @@ public class DriveListActivity extends AppCompatActivity {
     public void updateDrivesInUI()
     {
         localDrives.load();
-        final List<Trip> drives = new ArrayList<Trip>(localDrives.getSortedItems());
+        final List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(drives);
