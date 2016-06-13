@@ -51,6 +51,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
         drawPath();
     }
 
@@ -83,10 +84,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         mMap.addPolyline(options);
-
-        // mMap.addPolyline( options );
         mMap.addMarker(new MarkerOptions().position(latLng).title("Trip ends"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+
     }
 }
