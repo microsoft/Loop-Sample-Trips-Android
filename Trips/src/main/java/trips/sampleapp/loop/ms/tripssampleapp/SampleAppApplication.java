@@ -53,12 +53,15 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onCreate() {
         super.onCreate();
 
-        String appId = "hackathon-test-p-dev-5a62c8a8";
-        String appToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImhhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4IiwiYXBwS2V5IjoiM2Y3Y2ZkYjFlMmVkLTQ3MTgtOGI5Mi0wNDFhY2NhNGIxODYiLCJhbGxvd2VkUm91dGVzIjpbeyJtZXRob2QiOiJwb3N0IiwicGF0aCI6Ii92Mi4wL2FwcC9oYWNrYXRob24tdGVzdC1wLWRldi01YTYyYzhhOC91c2VyIn0seyJtZXRob2QiOiJkZWxldGUiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L3VzZXIifSx7Im1ldGhvZCI6InBvc3QiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L2xvZ2luIn0seyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L3VzZXIifSx7Im1ldGhvZCI6ImdldCIsInBhdGgiOiIvdjIuMC9hcHAvaGFja2F0aG9uLXRlc3QtcC1kZXYtNWE2MmM4YTgvdXNlci9bd2QtXSoifV0sImlhdCI6MTQ2NTk1MjIxMCwiaXNzIjoiTG9vcCBBdXRoIHYyIiwic3ViIjoiaGFja2F0aG9uLXRlc3QtcC1kZXYtNWE2MmM4YTgifQ.s3jSJ6Yce4wP0T5DoKzECV5YMU-i9e3WW5Ve8bGT3ts";
+        String appId = "";
+        String appToken = "";
 
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
-        LoopSDK.initialize(this, appId, appToken, "fd788a3c-2633-4db6-af5b-e85b531d79f1", "af4a9ad2-1892-4ac3-aa14-f7375935fc07");
+        String userId = "";
+        String deviceId = "";
+
+        LoopSDK.initialize(this, appId, appToken, userId, deviceId);
         applicationContext = this;
     }
     @Override
