@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Showonmap"
         android:text="Synced"
+        android:visibility="gone"
         android:textColor="#008000"
         android:textSize="12sp" />
 

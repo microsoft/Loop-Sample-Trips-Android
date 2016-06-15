@@ -45,9 +45,6 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     private static Context applicationContext;
     private static boolean sdkInitialized = false;
 
-    private String projectToken = "d416de690e6d8a004ef95c5f6e9e17b5"; // e.g.: "1ef7e30d2a58d27f4b90c42e31d6d7ad"
-
-    public static MixpanelAPI mixpanelAPI;
     public static TripProcessor tripProcessor;
     public static DriveProcessor driveProcessor;
 
@@ -56,16 +53,13 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onCreate() {
         super.onCreate();
 
-        String appId = "shuaib-sample-ap-dev-4a780486";
-        String appToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6InNodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2IiwiYXBwS2V5IjoiZGQxMzIxZjQ3MDAzLTRmMjYtODVmOC04OWNhNTM2ODhhYjQiLCJhbGxvd2VkUm91dGVzIjpbeyJtZXRob2QiOiJwb3N0IiwicGF0aCI6Ii92Mi4wL2FwcC9zaHVhaWItc2FtcGxlLWFwLWRldi00YTc4MDQ4Ni91c2VyIn0seyJtZXRob2QiOiJkZWxldGUiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L3VzZXIifSx7Im1ldGhvZCI6InBvc3QiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L2xvZ2luIn0seyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3YyLjAvYXBwL3NodWFpYi1zYW1wbGUtYXAtZGV2LTRhNzgwNDg2L3VzZXIifV0sImlhdCI6MTQ2NDAyNjY5NCwiaXNzIjoiTG9vcCBBdXRoIHYyIiwic3ViIjoic2h1YWliLXNhbXBsZS1hcC1kZXYtNGE3ODA0ODYifQ.9zTjOKSf2hQLljmbJOnDZEJeSLabtWkq-V9r7H7TxHI";
+        String appId = "hackathon-test-p-dev-5a62c8a8";
+        String appToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImhhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4IiwiYXBwS2V5IjoiM2Y3Y2ZkYjFlMmVkLTQ3MTgtOGI5Mi0wNDFhY2NhNGIxODYiLCJhbGxvd2VkUm91dGVzIjpbeyJtZXRob2QiOiJwb3N0IiwicGF0aCI6Ii92Mi4wL2FwcC9oYWNrYXRob24tdGVzdC1wLWRldi01YTYyYzhhOC91c2VyIn0seyJtZXRob2QiOiJkZWxldGUiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L3VzZXIifSx7Im1ldGhvZCI6InBvc3QiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L2xvZ2luIn0seyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3YyLjAvYXBwL2hhY2thdGhvbi10ZXN0LXAtZGV2LTVhNjJjOGE4L3VzZXIifSx7Im1ldGhvZCI6ImdldCIsInBhdGgiOiIvdjIuMC9hcHAvaGFja2F0aG9uLXRlc3QtcC1kZXYtNWE2MmM4YTgvdXNlci9bd2QtXSoifV0sImlhdCI6MTQ2NTk1MjIxMCwiaXNzIjoiTG9vcCBBdXRoIHYyIiwic3ViIjoiaGFja2F0aG9uLXRlc3QtcC1kZXYtNWE2MmM4YTgifQ.s3jSJ6Yce4wP0T5DoKzECV5YMU-i9e3WW5Ve8bGT3ts";
 
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
-        LoopSDK.initialize(this, appId, appToken);
+        LoopSDK.initialize(this, appId, appToken, "fd788a3c-2633-4db6-af5b-e85b531d79f1", "af4a9ad2-1892-4ac3-aa14-f7375935fc07");
         applicationContext = this;
-        mixpanelAPI = MixpanelAPI.getInstance(applicationContext, projectToken);
-        setMixpanelUser();
-        mixpanelAPI.track("App Started");
     }
     @Override
     public void onInitialized() {
@@ -89,16 +83,12 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             LoopSDK.registerSignalListener("drives", "*", new ISignalListener() {
                 @Override
                 public void onSignal(Signal signal) {
-                    trackSignal(signal);
                 }
             });
 
             LoopLocationProvider.registerMainThreadCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
                 @Override
                 public void onLocationChanged(LoopLocation location) {
-                    HashMap<String, Object> map = new HashMap<String, Object>();
-                    map.put("debug", location.getDebugString());
-                    mixpanelAPI.track("onLocationChanged");
                 }
 
                 @Override
@@ -123,69 +113,6 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
     @Override
     public void onDebug(String debugString) {
-
-        if (debugString.contains("receivedDrivingMotion cleared")) {
-            mixpanelAPI.track("Drive points cleared");
-        }
-
-    }
-
-
-
-    public static void setPeopleProperty(String key, Object obj) {
-        mixpanelAPI.getPeople().set(key, obj);
-        mixpanelAPI.flush();
-    }
-
-    public static void trackSignal(Signal signal) {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("createdAt", signal.createdAt);
-        map.put("entityId", signal.entityId);
-        map.put("method", signal.method);
-        map.put("namespace", signal.namespace);
-        map.put("data", signal.data.toString());
-
-        Iterator it = signal.data.keys();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            try {
-                map.put(key, signal.data.get(key));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        map.put("id", LoopSDK.userId);
-        mixpanelAPI.identify(getEmail());
-
-        mixpanelAPI.trackMap(signal.name, map);
-        mixpanelAPI.flush();
-    }
-
-    public void setMixpanelUser()
-    {
-        MixpanelAPI.People people = mixpanelAPI.getPeople();
-
-        if (people != null) {
-            people.identify(getEmail());
-            people.set("$email", getEmail());
-            people.set("appVersion", BuildConfig.VERSION_NAME);
-            mixpanelAPI.flush();
-        }
-    }
-
-    public static String getEmail() {
-        String possibleEmail = "";
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(applicationContext).getAccounts();
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                possibleEmail = account.name;
-                if (possibleEmail.contains("gmail.com")) {
-                    return possibleEmail;
-                }
-            }
-        }
-        return possibleEmail;
     }
 
     public static boolean isLocationTurnedOn(Context context) {

@@ -1,49 +1,31 @@
 package trips.sampleapp.loop.ms.tripssampleapp;
 
 import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.LocationManager;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Drives;
-import ms.loop.loopsdk.profile.GeoCoder;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
-//import ms.loop.loopsdk.profile.IProfileListener;
-import ms.loop.loopsdk.profile.Item;
-import ms.loop.loopsdk.profile.ItemList;
-import ms.loop.loopsdk.profile.Profile;
 import ms.loop.loopsdk.profile.Trip;
-import ms.loop.loopsdk.profile.Trips;
-import ms.loop.loopsdk.signal.Signal;
-import ms.loop.loopsdk.util.LoopDate;
 import ms.loop.loopsdk.util.LoopError;
-import trips.sampleapp.loop.ms.tripssampleapp.model.ServerDrives;
+
+//import ms.loop.loopsdk.profile.IProfileListener;
 
 public class DriveListActivity extends AppCompatActivity {
 
@@ -129,7 +111,6 @@ public class DriveListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(drives);
-                SampleAppApplication.setPeopleProperty("Drives", adapter.getCount());
             }
         });
     }
@@ -138,7 +119,6 @@ public class DriveListActivity extends AppCompatActivity {
     {
         if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId)) {
             LoopSDK.forceSync();
-            download(true);
         }
         if (localDrives.itemList.size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
             updateDrivesInUI();
@@ -194,18 +174,6 @@ public class DriveListActivity extends AppCompatActivity {
             startActivity(myIntent);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void download(boolean overwrite) {
-        ServerDrives.Instance.download(overwrite, new IProfileDownloadCallback() {
-            @Override
-            public void onProfileDownloadComplete(int itemCount) {
-               updateDrivesInUI();
-            }
-
-            @Override
-            public void onProfileDownloadFailed(LoopError error) {}
-        });
     }
 
     public void checkLocationEnabled() {

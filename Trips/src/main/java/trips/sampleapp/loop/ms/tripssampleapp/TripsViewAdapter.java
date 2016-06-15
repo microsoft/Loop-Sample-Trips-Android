@@ -7,10 +7,8 @@ package trips.sampleapp.loop.ms.tripssampleapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,19 +16,10 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import ms.loop.loopsdk.api.LoopApiHelper;
-import ms.loop.loopsdk.core.ILoopServiceCallback;
 import ms.loop.loopsdk.profile.Drive;
-import ms.loop.loopsdk.profile.GeoCoder;
-import ms.loop.loopsdk.profile.GeospatialPoint;
 import ms.loop.loopsdk.profile.Trip;
-import ms.loop.loopsdk.util.LoopError;
-import trips.sampleapp.loop.ms.tripssampleapp.model.ServerDrives;
-import trips.sampleapp.loop.ms.tripssampleapp.model.ServerTrips;
 
 
 public class TripsViewAdapter extends ArrayAdapter<Trip> {
@@ -51,9 +40,7 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
         this.trips.clear();
 
         for (Trip trip: data) {
-            if (trip.isValid()) {
-                this.trips.add(trip);
-            }
+            this.trips.add(trip);
         }
         this.notifyDataSetChanged();
     }
@@ -111,13 +98,6 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
         holder.txtDistance.setText(getTripDistance(trip));
         holder.txtTime.setText(getTripTimeInfo(trip));
         holder.txtTotalTime.setText(getTripDistanceTime(trip));
-
-        if (trip instanceof Drive) {
-            holder.existOnServer.setVisibility(ServerDrives.Instance.hasDrive(trip.entityId) ? View.VISIBLE : View.GONE);
-        }
-        else if (trip instanceof Trip) {
-            holder.existOnServer.setVisibility(ServerTrips.Instance.hasTrip(trip.entityId) ? View.VISIBLE : View.GONE);
-        }
         row.setClickable(true);
 
         final View finalRow = row;

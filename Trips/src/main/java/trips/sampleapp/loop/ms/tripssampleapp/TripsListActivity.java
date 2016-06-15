@@ -30,7 +30,6 @@ import ms.loop.loopsdk.profile.Trips;
 import ms.loop.loopsdk.signal.Signal;
 import ms.loop.loopsdk.util.LoopDate;
 import ms.loop.loopsdk.util.LoopError;
-import trips.sampleapp.loop.ms.tripssampleapp.model.ServerTrips;
 
 public class TripsListActivity extends AppCompatActivity {
 
@@ -115,7 +114,6 @@ public class TripsListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 adapter.update(trips);
-                SampleAppApplication.setPeopleProperty("Trips", adapter.getCount());
             }
         });
     }
@@ -123,7 +121,6 @@ public class TripsListActivity extends AppCompatActivity {
     public void loadTrips() {
         if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId)) {
             LoopSDK.forceSync();
-            download(true);
         }
         if (localTrips.itemList.size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
             updateTripsInUI();
@@ -183,16 +180,6 @@ public class TripsListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void download(boolean overwrite) {
-        ServerTrips.Instance.download(overwrite, new IProfileDownloadCallback() {
-            @Override
-            public void onProfileDownloadComplete(int itemCount) {
-            updateTripsInUI();
-            }
-            @Override
-            public void onProfileDownloadFailed(LoopError error) {}
-        });
-    }
     public static Trip getTrip(String entityId)
     {
         return localTrips.byEntityId(entityId);
