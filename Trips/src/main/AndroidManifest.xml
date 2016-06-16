@@ -23,7 +23,7 @@
         <activity
             android:name=".DriveListActivity"
             android:launchMode="singleInstance"
-            android:label="Drives">
+            android:label="Loop Trips">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

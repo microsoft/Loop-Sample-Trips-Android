@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trips</string>
+    <string name="app_name">Loop Trips</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_trips_list1">Logs</string>
     <string name="title_activity_settings">Settings</string>
