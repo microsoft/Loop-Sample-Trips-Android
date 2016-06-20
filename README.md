@@ -1,6 +1,6 @@
 # Loop Sample Trips/Drives
 
-These instructions will get you a copy of a Loop sample app for pulling user trips and display them in the UI
+These instructions will get you a copy of a Loop sample app that will download user trips generated in the Loop platform and display them.
 
   0. If you haven’t already, signup for a Loop account and create an app on the [Loop Developer Site](https://developer.dev.loop.ms)
   0. Get the sample app
