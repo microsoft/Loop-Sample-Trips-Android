@@ -4,6 +4,11 @@ import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +31,8 @@ import ms.loop.loopsdk.profile.GeospatialPoint;
 import ms.loop.loopsdk.profile.Path;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
+import trips.sampleapp.loop.ms.tripssampleapp.utils.TripView;
+import trips.sampleapp.loop.ms.tripssampleapp.utils.ViewUtils;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -33,6 +40,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String entityId;
     private Trips trips;
     private Drives drives;
+    Trip trip;
+    TripView tripView;
+    private ImageView backAction;
+    private ImageView deleteDriveAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         entityId = this.getIntent().getExtras().getString("tripid");
         trips = Trips.createAndLoad(Trips.class, Trip.class);
         drives = Drives.createAndLoad(Drives.class, Drive.class);
+
+        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content)).getChildAt(0);
+
+        tripView = new TripView(viewGroup);
+
+        backAction = (ImageView)findViewById(R.id.action_back_ic);
+        deleteDriveAction = (ImageView)findViewById(R.id.action_delete_drive_ic);
+
+        backAction.setClickable(true);
+
+        backAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        deleteDriveAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if (trip != null){
+               // trip.delete(true);
+                finish();
+            }
+            }
+        });
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        trip = null;
+        trip = trips.byEntityId(entityId);
+        if (trip == null) {
+            trip = drives.byEntityId(entityId);
+            if (trip == null) return;
+        }
     }
 
     @Override
@@ -56,11 +106,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void drawPath() {
-        Trip trip = trips.byEntityId(entityId);
-        if (trip == null) {
-            trip = drives.byEntityId(entityId);
-            if (trip == null) return;
-        }
+
+        tripView.update(this, trip);
+
         GeospatialPoint firstPoint = trip.path.points.get(0);
 
         PolylineOptions options = new PolylineOptions()

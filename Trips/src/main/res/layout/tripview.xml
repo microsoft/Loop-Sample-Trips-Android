@@ -1,75 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/listcontainer"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:customTextView="https://schemas.android.com/apk/res/trips.sampleapp.loop.ms.tripssampleapp.utils"
+    android:id="@+id/drivelistcontainer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:weightSum="1">
+    android:orientation="horizontal" tools:ignore="all">
 
-    <TextView
-        android:id="@+id/txtTime"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingBottom="2dp"
-        android:text="Time"
-        android:textColor="#000"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:layout_height="fill_parent"
+        android:layout_gravity="left"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/txtdistance"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/drive_from_location_unknwon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="3dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_location_unknown"
+                android:layout_gravity="center_vertical"/>
+
+            <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+                android:id="@+id/drive_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:text="From"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:alpha="0.87"
+                customTextView:fontName="Roboto-Regular"/>
+
+            <ImageView
+                android:id="@+id/drive_direction_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_drive_direction"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:id="@+id/drive_direction_icon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:src="@drawable/ic_drive_direction2"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"/>
+
+
+            <ImageView
+                android:id="@+id/drive_to_location_unknwon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="3dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_location_unknown"
+                android:layout_gravity="center_vertical"/>
+
+
+
+            <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+                android:id="@+id/drive_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:text="To"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:alpha="0.87"
+                customTextView:fontName="Roboto-Regular"/>
+        </LinearLayout>
+
+        <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+            android:id="@+id/drive_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity= "center_vertical"
+            android:paddingBottom="2dp"
+            android:text="Today"
+            customTextView:fontName="DroidSansMono"
+            android:textColor="#000"
+            android:textSize="12sp"
+            android:alpha="0.54" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtTime"
-        android:paddingBottom="2dp"
-        android:text="Distance"
-        android:textColor="#000000"
-        android:textSize="12sp" />Ï
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"
+        android:orientation="vertical"
+        android:paddingTop="11dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical">
 
+        <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+            android:id="@+id/drive_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="From"
+            customTextView:fontName="DroidSansMono"
+            android:textColor="#E9E9E9"
+            android:background="@color/black"
+            android:textSize="10sp"
+            android:layout_gravity="right"/>
 
-    <TextView
-        android:id="@+id/txtTotalTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtdistance"
-        android:gravity="center_vertical"
-        android:paddingBottom="2dp"
-        android:text="Duration"
-        android:textColor="#000000"
-        android:textSize="12sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="2dp"
+            android:paddingTop="10dp">
 
-    <TextView
-        android:id="@+id/txtLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/txtTotalTime"
-        android:paddingBottom="2dp"
-        android:text="Location"
-        android:textColor="#000000"
-        android:textSize="12sp" />
+            <ImageView
+                android:id="@+id/drive_duration_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_drive_duration"
+                android:layout_gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/Showonmap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtLocation"
-        android:paddingBottom="2dp"
-        android:text="See on Map"
-        android:textColor="#0000A0"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+            <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+                android:id="@+id/drive_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To"
+                android:paddingLeft="5dp"
+                customTextView:fontName="DroidSansMono"
+                android:textColor="#1E1E1E"
+                android:textSize="10sp" />
 
-    <TextView
-        android:id="@+id/exitsonserver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Showonmap"
-        android:text="Synced"
-        android:visibility="gone"
-        android:textColor="#008000"
-        android:textSize="12sp" />
+        </LinearLayout>
 
-</RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

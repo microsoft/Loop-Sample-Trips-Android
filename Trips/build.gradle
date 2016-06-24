@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
-        versionName "0.6.10"
+        versionName "0.6.18"
         multiDexEnabled true
     }
     dexOptions {
@@ -21,6 +21,17 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        // set to true to turn off analysis progress reporting by lint
+        quiet false
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings false
+        // project specific lint options
+        lintConfig new File(rootProject.projectDir, "lint.xml")
     }
 
     applicationVariants.all { variant ->
@@ -37,11 +48,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'ms.loop:loopsdk:2.0.1'
-    compile 'com.google.android.gms:play-services:8.4.0'
+    compile ('ms.loop:loopsdk:2.0.1-develop') { changing = true }
+    compile 'com.google.android.gms:play-services:9.0.2'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.mixpanel.android:mixpanel-android:4.+'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
 }
