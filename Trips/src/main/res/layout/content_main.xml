@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:customTextView="https://schemas.android.com/apk/res/trips.sampleapp.loop.ms.tripssampleapp.utils"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="trips.sampleapp.loop.ms.tripssampleapp.MainActivity"
+    tools:ignore="all"
+    tools:showIn="@layout/app_bar_main">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+                android:id="@+id/txtlocationtracking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="3dp"
+                android:text="DRIVE RECORDING ON"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                customTextView:fontName="DroidSansMono" />
+
+            <Switch
+                android:id="@+id/locationswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"
+                android:text="" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="19dp"
+            android:src="@drawable/dashed_line_angle"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/tripslist_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="44dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="74dp">
+
+        <ListView
+            android:id="@+id/tripslist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/dashed_line_horizantal"
+            android:listSelector="@color/colorPrimary"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:scrollbars="none" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,22 @@
+<lint>
+    <issue id="InvalidPackage">
+        <!-- due to an issue with okio, we need to exclude lint errors for it -->
+        <!-- http://stackoverflow.com/questions/35492259/lint-error-on-okio -->
+        <!-- https://github.com/square/okio/issues/58 -->
+        <ignore regexp=".*okio.*" />
+        
+        <!-- due to an issue with Apache Commons Math3, we need to exclude lint errors for it -->
+        <ignore regexp="org.apache.commons.math3.*" />
+    </issue>
+    
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+   
+    <issue id="IconDensities" severity="ignore" />
+    
+
+    <!-- Disable check for old api versions -->
+    <issue id="OldTargetApi" severity="ignore" />
+
+    <!-- Disable check for old versions of Gradle dependencies -->
+    <issue id="GradleDependency" severity="ignore" />
+</lint>
