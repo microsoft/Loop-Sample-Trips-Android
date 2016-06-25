@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "trips.sampleapp.loop.ms.tripssampleapp"
-        minSdkVersion 19
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "0.6.18"
