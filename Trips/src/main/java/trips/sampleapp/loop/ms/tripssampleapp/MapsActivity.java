@@ -79,7 +79,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
             if (trip != null){
-               // trip.delete(true);
+                trip.delete();
                 finish();
             }
             }
