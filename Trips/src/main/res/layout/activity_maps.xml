@@ -1,8 +1,56 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="trips.sampleapp.loop.ms.tripssampleapp.MapsActivity" />
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_navigation_back"
+            android:paddingEnd="5dp"
+            android:paddingStart ="0dp"
+            android:layout_weight="10"
+            android:id="@+id/action_back_ic"
+            android:contentDescription="@string/back_to_main"/>
+
+        <include
+            layout="@layout/tripview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="70" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_drive"
+            android:paddingTop="10dp"
+            android:layout_weight="20"
+            android:id="@+id/action_delete_drive_ic"
+            android:contentDescription="@string/delete_drive"/>
+    </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="trips.sampleapp.loop.ms.tripssampleapp.MapsActivity" />
+</LinearLayout>
