@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,8 +52,10 @@ public class MainActivity extends AppCompatActivity
     private ListView tripListView;
     private Switch locationSwitch;
     private TextView locationText;
-    public static Drives localDrives;
-    public static Trips localTrips;
+    private static Drives localDrives;
+    private static Trips localTrips;
+
+    private static RelativeLayout enableLocation;
 
     private NavigationView navigationView;
 
@@ -187,6 +190,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
+
+        enableLocation = (RelativeLayout) this.findViewById(R.id.locationstrackingcontainer);
     }
 
 
@@ -264,9 +269,11 @@ public class MainActivity extends AppCompatActivity
         if (SampleAppApplication.isLocationTurnedOn(this)) {
             locationText.setText(this.getText(R.string.driving_recording_on));
             locationSwitch.setChecked(true);
+            enableLocation.setVisibility(View.GONE);
         } else {
             locationText.setText(this.getText(R.string.driving_recording_off));
             locationSwitch.setChecked(false);
+            enableLocation.setVisibility(View.VISIBLE);
         }
     }
 

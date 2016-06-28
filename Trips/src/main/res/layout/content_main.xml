@@ -11,13 +11,15 @@
     tools:ignore="all"
     tools:showIn="@layout/app_bar_main">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/locationsettingcontainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/locationstrackingcontainer"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:paddingLeft="16dp"
@@ -46,16 +48,24 @@
                 android:text="" />
         </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="19dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/locationstrackingcontainer">
+
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="19dp"
-            android:src="@drawable/dashed_line_angle"
-            android:cropToPadding="true"
-            android:scaleType="centerCrop"/>
+            android:scaleType="center"
+            android:src="@drawable/dashed_line_angle" />
+        </RelativeLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/tripslist_container"
@@ -64,13 +74,15 @@
         android:paddingBottom="44dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="74dp">
+        android:layout_below="@+id/locationsettingcontainer">
 
         <ListView
             android:id="@+id/tripslist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@drawable/dashed_line_horizantal"
+            android:divider="@drawable/dashed"
+            android:dividerHeight="2dp"
+            android:layerType="software"
             android:listSelector="@color/colorPrimary"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

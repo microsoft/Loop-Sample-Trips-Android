@@ -47,7 +47,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
         String appId = "";
         String appToken = "";
-
+        
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
         String userId = "";

@@ -27,6 +27,8 @@
             android:src="@drawable/ic_navigation_back"
             android:paddingEnd="5dp"
             android:paddingStart ="0dp"
+            android:paddingLeft ="0dp"
+            android:paddingRight ="5dp"
             android:layout_weight="10"
             android:id="@+id/action_back_ic"
             android:contentDescription="@string/back_to_main"/>
