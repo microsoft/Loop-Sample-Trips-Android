@@ -45,9 +45,9 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
         //replace appId and device id below
 
-        String appId = "sample-trips-app-dev-23dfcb96";
-        String appToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb3V0ZXMiOlt7Im1ldGhvZCI6InBvc3QiLCJwYXRoIjoiL3YyLjAvYXBwL3NhbXBsZS10cmlwcy1hcHAtZGV2LTIzZGZjYjk2L3VzZXIifSx7Im1ldGhvZCI6ImRlbGV0ZSIsInBhdGgiOiIvdjIuMC9hcHAvc2FtcGxlLXRyaXBzLWFwcC1kZXYtMjNkZmNiOTYvdXNlciJ9LHsibWV0aG9kIjoicG9zdCIsInBhdGgiOiIvdjIuMC9hcHAvc2FtcGxlLXRyaXBzLWFwcC1kZXYtMjNkZmNiOTYvbG9naW4ifSx7Im1ldGhvZCI6ImdldCIsInBhdGgiOiIvdjIuMC9hcHAvc2FtcGxlLXRyaXBzLWFwcC1kZXYtMjNkZmNiOTYvdXNlciJ9LHsibWV0aG9kIjoiZ2V0IiwicGF0aCI6Ii92Mi4wL2FwcC9zYW1wbGUtdHJpcHMtYXBwLWRldi0yM2RmY2I5Ni91c2VyL1teLy5dKyJ9XSwiaXNzIjoiTWljcm9zb2Z0IExPT1AgQXV0aCBWMiIsInN1YiI6InNhbXBsZS10cmlwcy1hcHAtZGV2LTIzZGZjYjk2In0.EJGdkh0Eg15kAmLFXsGh5lujbqHU8j1SzDe_5FqosTI";
-
+        String appId = "";
+        String appToken = "";
+        
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
         String userId = "";
