@@ -48,15 +48,6 @@
                 android:text="" />
         </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:paddingLeft="19dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:layout_below="@+id/locationstrackingcontainer">
-
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
@@ -64,9 +55,6 @@
             android:scaleType="center"
             android:src="@drawable/dashed_line_angle" />
         </RelativeLayout>
-
-    </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/tripslist_container"
         android:layout_width="match_parent"
