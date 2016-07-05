@@ -95,7 +95,7 @@ public class TripView {
     private String getTripDistance(Trip trip) {
         Double dist = trip.getRouteDistanceInKilometers();
         Double miles = dist * 0.621371;
-        return String.format(Locale.US, "%.2f mi.",dist, miles);
+        return String.format(Locale.US, "%.2f mi.", miles);
     }
 
     private String getTripTimeInfo(Trip trip) {
