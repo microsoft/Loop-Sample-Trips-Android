@@ -9,10 +9,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ThemeName" parent="AppTheme">
-        <item name="actionMenuTextColor">@color/white</item>
-        <item name="android:actionMenuTextColor">@color/white</item>
-    </style>
 
     <style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@color/action_menu_selected_color</item>
