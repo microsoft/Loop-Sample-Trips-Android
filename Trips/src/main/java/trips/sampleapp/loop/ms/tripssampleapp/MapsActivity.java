@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.Drive;
@@ -50,8 +51,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageView backAction;
     private ImageView deleteDriveAction;
 
-    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
