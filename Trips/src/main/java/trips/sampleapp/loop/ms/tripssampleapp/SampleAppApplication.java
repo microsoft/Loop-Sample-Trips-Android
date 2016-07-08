@@ -39,18 +39,14 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // replace appId and device id below
-
-        String appId = "YOUR_APP_ID";
-        String appToken = "YOUR_APP_TOKEN";
         
-        SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
+        // initialize the Loop SDK. create an account to get your appId and appToken
+        String appId = "YOUR APP ID";
+        String appToken = "YOUR APP TOKEN";
+        String userId = "YOUR USER ID";
+        String deviceId = "YOUR DEVICE ID";
 
-        String userId = "TEST_USER_USER_ID";
-        String deviceId = "TEST_USER_DEVICE_ID";
-
-        LoopSDK.initialize(this, appId, appToken);
+        LoopSDK.initialize(this, appId, appToken, userId, deviceId);
         applicationContext = this;
     }
     @Override
@@ -68,6 +64,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             // initialize signal processors
             tripProcessor.initialize();
             driveProcessor.initialize();
+            knownLocationProcessor.initialize();
 
             sdkInitialized = true;
 
@@ -78,7 +75,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
                 }
             });
 
-            LoopLocationProvider.registerMainThreadCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
+            LoopLocationProvider.registerCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
                 @Override
                 public void onLocationChanged(LoopLocation location) {
                 }
