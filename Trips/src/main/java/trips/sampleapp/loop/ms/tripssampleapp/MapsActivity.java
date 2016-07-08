@@ -1,5 +1,6 @@
 package trips.sampleapp.loop.ms.tripssampleapp;
 
+import android.content.ClipboardManager;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,9 +24,13 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
+import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.GeospatialPoint;
@@ -44,6 +50,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     TripView tripView;
     private ImageView backAction;
     private ImageView deleteDriveAction;
+
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 trip.delete();
                 finish();
             }
+            }
+        });
+
+        viewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+                // Adjust start time by 30 minutes
+                Calendar startTime = Calendar.getInstance();
+                startTime.setTime(trip.startedAt);
+                startTime.add(Calendar.MINUTE, -30);
+
+                Calendar endTime = Calendar.getInstance();
+                endTime.setTime(trip.endedAt);
+                endTime.add(Calendar.MINUTE, 30);
+
+                String startedAtDate = dateFormat.format(startTime.getTime());
+                String startedAtHour = hourFormat.format(startTime.getTime());
+                String endedAtDate = dateFormat.format(endTime.getTime());
+                String endedAtHour = hourFormat.format(endTime.getTime());
+                String queryDate = LoopSDK.userId + " AND location AND createdAt:[\"" + startedAtDate + "T" + startedAtHour + "-07:00\" TO \"" + endedAtDate + "T" + endedAtHour + "-07:00\"]";
+                clipboard.setText(queryDate);
+                Toast.makeText(MapsActivity.this, "Elastic search query copied", Toast.LENGTH_SHORT).show();
             }
         });
     }
