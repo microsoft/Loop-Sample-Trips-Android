@@ -25,9 +25,6 @@ import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.Logger;
 import ms.loop.loopsdk.util.LoopError;
 
-/**
- * Created by on 5/24/16.
- */
 public class SampleAppApplication extends MultiDexApplication implements ILoopSDKCallback {
 
     private static final String TAG = SampleAppApplication.class.getSimpleName();
@@ -43,15 +40,15 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onCreate() {
         super.onCreate();
 
-        //replace appId and device id below
+        // replace appId and device id below
 
-        String appId = "";
-        String appToken = "";
+        String appId = "YOUR_APP_ID";
+        String appToken = "YOUR_APP_TOKEN";
         
         SignalConfig.add(TAG, "/system", "/test", "*", SignalConfig.SIGNAL_SEND_MODE_REALTIME);
 
-        String userId = "";
-        String deviceId = "";
+        String userId = "TEST_USER_USER_ID";
+        String deviceId = "TEST_USER_DEVICE_ID";
 
         LoopSDK.initialize(this, appId, appToken);
         applicationContext = this;
@@ -95,7 +92,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             });
         }
 
-       // knownLocationProcessor.initialize();
+        // knownLocationProcessor.initialize();
         Intent i = new Intent("android.intent.action.onInitialized").putExtra("status", "initialized");
         this.sendBroadcast(i);
     }
