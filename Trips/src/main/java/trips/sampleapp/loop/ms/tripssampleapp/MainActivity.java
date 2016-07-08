@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity
     public void updateDrivesInUI() {
 
         localTrips.load();
+        localDrives.load();
         final TextView titleTextView = (TextView) this.findViewById(R.id.toolbar_title);
         String title = "";
         List<Trip> drives = new ArrayList<>();
