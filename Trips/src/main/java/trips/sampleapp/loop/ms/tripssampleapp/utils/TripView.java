@@ -79,6 +79,13 @@ public class TripView {
         String start = TextUtils.isEmpty(trip.startLocale.getFriendlyName()) ? "Unknown" : trip.startLocale.getFriendlyName();
         String end = TextUtils.isEmpty(trip.endLocale.getFriendlyName()) ? "Unknown" : trip.endLocale.getFriendlyName();
 
+        if (start.equals("unknown")){
+            trip.updateStartLocale();
+        }
+        if (end.equals("unknown")){
+            trip.updateEndLocale();
+        }
+
         if (start.equalsIgnoreCase(end)) {
             driveToUnknown.setVisibility(View.GONE);
             return "";
