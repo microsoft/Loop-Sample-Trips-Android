@@ -2,6 +2,7 @@ package trips.sampleapp.loop.ms.tripssampleapp;
 
 import android.content.ClipboardManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -150,7 +153,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .color(Color.BLUE)
                 .geodesic(true).clickable(true);
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees)).title("Trip starts"));
+        MarkerOptions startMarker = new MarkerOptions();
+        startMarker.position(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees)).title("Trip starts");
+        startMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_trip_start));
+
+
+        mMap.addMarker(startMarker);
         LatLng latLng = new LatLng(firstPoint.latDegrees, firstPoint.longDegrees);
         for (GeospatialPoint point: trip.path.points)
         {
@@ -165,7 +173,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         mMap.addPolyline(options);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Trip ends"));
+
+        MarkerOptions endMarker = new MarkerOptions();
+        endMarker.position(latLng).title("Trip ends");
+        endMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_trip_end));
+
+        mMap.addMarker(endMarker);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
 
     }
