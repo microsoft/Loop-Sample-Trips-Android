@@ -9,8 +9,12 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7.13"
+        versionName "0.7.18"
         multiDexEnabled true
+
+        buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'
+        buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPS_APP_TOKEN_PROP + '\"'
+        buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
     }
     dexOptions {
         dexInProcess = false
@@ -48,7 +52,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile ('ms.loop:loopsdk:2.0.3-develop') { changing = true }
+    compile ('ms.loop:loopsdk:2.0.4-develop') { changing = true }
     compile 'com.google.android.gms:play-services:9.0.2'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'

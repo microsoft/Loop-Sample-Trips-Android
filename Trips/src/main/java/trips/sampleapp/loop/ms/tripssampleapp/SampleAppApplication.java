@@ -22,7 +22,6 @@ import ms.loop.loopsdk.providers.LoopLocation;
 import ms.loop.loopsdk.providers.LoopLocationProvider;
 import ms.loop.loopsdk.signal.Signal;
 import ms.loop.loopsdk.signal.SignalConfig;
-import ms.loop.loopsdk.util.Logger;
 import ms.loop.loopsdk.util.LoopError;
 
 public class SampleAppApplication extends MultiDexApplication implements ILoopSDKCallback {
@@ -41,12 +40,15 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         super.onCreate();
         
         // initialize the Loop SDK. create an account to get your appId and appToken
-        String appId = "YOUR APP ID";
-        String appToken = "YOUR APP TOKEN";
+        // initialize the Loop SDK. create an account to get your appId and appToken
+
+        String appId = BuildConfig.APP_ID; // Or replace your id here
+        String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
+
         String userId = "YOUR USER ID";
         String deviceId = "YOUR DEVICE ID";
 
-        LoopSDK.initialize(this, appId, appToken, userId, deviceId);
+        LoopSDK.initialize(this, appId, appToken);
         applicationContext = this;
     }
     @Override
@@ -87,6 +89,8 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
                 @Override
                 public void onKnownLocationExited(KnownLocation location) {}
             });
+
+            LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
         }
 
         // knownLocationProcessor.initialize();
