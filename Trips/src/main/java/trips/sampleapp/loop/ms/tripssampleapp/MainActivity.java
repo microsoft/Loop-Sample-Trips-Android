@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -142,11 +144,9 @@ public class MainActivity extends AppCompatActivity
         localDrives.registerItemChangedCallback("Drives", new IProfileItemChangedCallback() {
             @Override
             public void onItemChanged(String entityId) {
-                updateDrivesInUI();
             }
             @Override
             public void onItemAdded(String entityId) {
-                updateDrivesInUI();
             }
 
             @Override
@@ -156,11 +156,9 @@ public class MainActivity extends AppCompatActivity
         localTrips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback() {
             @Override
             public void onItemChanged(String entityId) {
-                updateDrivesInUI();
             }
             @Override
             public void onItemAdded(String entityId) {
-                updateDrivesInUI();
             }
 
             @Override
@@ -190,7 +188,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
-
         enableLocation = (RelativeLayout) this.findViewById(R.id.locationstrackingcontainer);
     }
 
@@ -279,28 +276,31 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDrivesInUI() {
 
-        localTrips.load();
         localDrives.load();
-        final TextView titleTextView = (TextView) this.findViewById(R.id.toolbar_title);
+        localTrips.load();
+
+        final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         String title = "";
         List<Trip> drives = new ArrayList<>();
         Menu m = navigationView.getMenu();
-        for (int i=0;i < m.size(); i++) {
+        for (int i = 0; i < m.size(); i++) {
             MenuItem mi = m.getItem(i);
-            if (mi.isChecked() && mi.getItemId() == R.id.nav_drives){
+            if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
                 drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
                 title = "DRIVES";
 
-            }
-            else if (mi.isChecked() && mi.getItemId()==R.id.nav_trips) {
+            } else if (mi.isChecked() && mi.getItemId() == R.id.nav_trips) {
                 drives = new ArrayList<Trip>(localTrips.sortedByStartedAt());
                 title = "TRIPS";
             }
         }
+
         final List<Trip> finalDrives = drives;
         final String finalTitle = title;
+
         runOnUiThread(new Runnable() {
             public void run() {
+
                 titleTextView.setText(finalTitle);
                 adapter.update(finalDrives);
             }

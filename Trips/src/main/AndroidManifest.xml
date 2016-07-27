@@ -12,6 +12,7 @@
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".SampleAppApplication"
         android:allowBackup="true"
@@ -45,10 +46,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity"
-            android:label="">
-
-        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label=""></activity>
     </application>
 
 </manifest>

@@ -10,5 +10,6 @@
 
     <string name="delete_drive">Delete Drive</string>
     <string name="back_to_main">Back to main view</string>
+    <string name="title_activity_maps2">Map</string>
 
 </resources>
