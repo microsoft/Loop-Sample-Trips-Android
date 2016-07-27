@@ -276,34 +276,33 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDrivesInUI() {
 
-        AsyncTask.execute(new Runnable() {
-            @Override
+        localDrives.load();
+        localTrips.load();
+
+        final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
+        String title = "";
+        List<Trip> drives = new ArrayList<>();
+        Menu m = navigationView.getMenu();
+        for (int i = 0; i < m.size(); i++) {
+            MenuItem mi = m.getItem(i);
+            if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
+                drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
+                title = "DRIVES";
+
+            } else if (mi.isChecked() && mi.getItemId() == R.id.nav_trips) {
+                drives = new ArrayList<Trip>(localTrips.sortedByStartedAt());
+                title = "TRIPS";
+            }
+        }
+
+        final List<Trip> finalDrives = drives;
+        final String finalTitle = title;
+
+        runOnUiThread(new Runnable() {
             public void run() {
 
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
-                        String title = "";
-                        List<Trip> drives = new ArrayList<>();
-                        Menu m = navigationView.getMenu();
-                        for (int i = 0; i < m.size(); i++) {
-                            MenuItem mi = m.getItem(i);
-                            if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
-                                drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
-                                title = "DRIVES";
-
-                            } else if (mi.isChecked() && mi.getItemId() == R.id.nav_trips) {
-                                drives = new ArrayList<Trip>(localTrips.sortedByStartedAt());
-                                title = "TRIPS";
-                            }
-                        }
-
-                        final List<Trip> finalDrives = drives;
-                        final String finalTitle = title;
-                        titleTextView.setText(finalTitle);
-                        adapter.update(finalDrives);
-                    }
-                });
+                titleTextView.setText(finalTitle);
+                adapter.update(finalDrives);
             }
         });
     }
