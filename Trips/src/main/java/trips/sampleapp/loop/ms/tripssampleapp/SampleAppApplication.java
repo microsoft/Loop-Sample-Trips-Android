@@ -105,8 +105,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onServiceStatusChanged(String provider, String status, Bundle bundle) {}
 
     @Override
-    public void onDebug(String debugString) {
-    }
+    public void onDebug(String debugString) {}
 
     public static boolean isLocationTurnedOn(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);

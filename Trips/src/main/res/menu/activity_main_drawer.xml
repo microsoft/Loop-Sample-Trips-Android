@@ -20,7 +20,7 @@
             android:id="@+id/nav_version"
             android:title=""
             android:icon="@drawable/ic_app_menu_icon"
-            android:actionMenuTextColor="@color/colorgray"
+            android:actionMenuTextColor="@color/action_menu_unselected_color"
             android:textSize="38sp"/>
     </group>
 </menu>
