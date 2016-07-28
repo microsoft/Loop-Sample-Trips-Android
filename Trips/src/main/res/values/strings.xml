@@ -5,8 +5,11 @@
     <string name="title_activity_maps">Map</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="driving_recording_on">DRIVES RECORDING ON</string>
-    <string name="driving_recording_off">DRIVES RECORDING OFF</string>
+    <string name="drives_recording_on">DRIVE RECORDING ON</string>
+    <string name="drives_recording_off">DRIVE RECORDING OFF</string>
+
+    <string name="trips_recording_on">TRIP RECORDING ON</string>
+    <string name="trips_recording_off">TRIP RECORDING OFF</string>
 
     <string name="delete_drive">Delete Drive</string>
     <string name="back_to_main">Back to main view</string>

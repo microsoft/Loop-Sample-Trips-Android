@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity
 
                 else if (!isChecked && isLocationOn)
                     SampleAppApplication.openLocationServiceSettingPage(MainActivity.this);
+
+                SampleAppApplication.setSharedPrefValue(getApplicationContext(), "AppTracking", isChecked);
             }
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
@@ -219,9 +221,7 @@ public class MainActivity extends AppCompatActivity
                 openUrlInBrowser(PRIVACY_URL);
             }
         });
-
     }
-
 
 
     @Override
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         loadDrivesAndTrips();
-        checkLocationEnabled();
+        checkTrackingEnbaled();
     }
 
     @Override
@@ -281,39 +281,44 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_drives) {
-
         } else if (id == R.id.nav_trips) {
-
         } else if (id == R.id.nav_version) {
             return false;
-
-    }
-
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void checkLocationEnabled() {
-        if (SampleAppApplication.isLocationTurnedOn(this)) {
-            locationText.setText(this.getText(R.string.driving_recording_on));
+    public void checkTrackingEnbaled() {
+        if (SampleAppApplication.getBooleanSharedPrefValue(this.getApplicationContext(), "AppTracking", true)) {
+
+            if (checkSelectedItemType().equals("TRIPS")){
+                locationText.setText(this.getText(R.string.trips_recording_on));
+            }
+            else {
+                locationText.setText(this.getText(R.string.drives_recording_on));
+            }
+
             locationSwitch.setChecked(true);
-            enableLocation.setVisibility(View.GONE);
+            //enableLocation.setVisibility(View.GONE);
         } else {
-            locationText.setText(this.getText(R.string.driving_recording_off));
+            if (checkSelectedItemType().equals("TRIPS")){
+                locationText.setText(this.getText(R.string.trips_recording_off));
+            }
+            else {
+                locationText.setText(this.getText(R.string.drives_recording_off));
+            }
             locationSwitch.setChecked(false);
-            enableLocation.setVisibility(View.VISIBLE);
+           // enableLocation.setVisibility(View.VISIBLE);
         }
     }
 
     public void updateDrivesInUI() {
-
         localDrives.load();
         localTrips.load();
-
         final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         String title = "";
         List<Trip> drives = new ArrayList<>();
@@ -323,10 +328,12 @@ public class MainActivity extends AppCompatActivity
             if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
                 drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
                 title = "DRIVES";
+                break;
 
-            } else if (mi.isChecked() && mi.getItemId() == R.id.nav_trips) {
+            } else if (mi.isChecked() && (mi.getItemId() == R.id.nav_trips || mi.getItemId() == R.id.nav_version)) {
                 drives = new ArrayList<Trip>(localTrips.sortedByStartedAt());
                 title = "TRIPS";
+                break;
             }
         }
 
@@ -335,7 +342,6 @@ public class MainActivity extends AppCompatActivity
 
         runOnUiThread(new Runnable() {
             public void run() {
-
                 titleTextView.setText(finalTitle);
                 adapter.update(finalDrives);
             }
@@ -345,5 +351,10 @@ public class MainActivity extends AppCompatActivity
     public void openUrlInBrowser(String url){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+    public String checkSelectedItemType() {
+        final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
+        return (String) titleTextView.getText();
     }
 }

@@ -50,7 +50,6 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         super.onCreate();
         
         // initialize the Loop SDK. create an account to get your appId and appToken
-        // initialize the Loop SDK. create an account to get your appId and appToken
 
         String appId = BuildConfig.APP_ID; // Or replace your id here
         String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
@@ -64,9 +63,8 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         String projectToken = BuildConfig.MIXPANEL_TOKEN;
         mixpanel = MixpanelAPI.getInstance(this, projectToken);
 
-        if (getSharedPrefValue(DAYS_IN_APP_KEY) == 0)
-        {
-            setSharedPrefValue(DAYS_IN_APP_KEY, System.currentTimeMillis());
+        if (getLongSharedPrefValue(this, DAYS_IN_APP_KEY) == 0) {
+            setSharedPrefValue(this, DAYS_IN_APP_KEY, System.currentTimeMillis());
             MixpanelAPI.People people = mixpanel.getPeople();
             people.identify(mixpanel.getDistinctId());
             String dateFirstSeen = convertDateFormat(new Date(), false);
@@ -153,19 +151,29 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         }
     }
 
-    private void setSharedPrefValue(String key, long value)
+    public static void setSharedPrefValue(Context context, String key, long value)
     {
-        getSharedPreferences("TripsApp",0).edit().putLong(key, value).apply();
-        getSharedPreferences("TripsApp",0).edit().commit();
+        context.getSharedPreferences("TripsApp",0).edit().putLong(key, value).apply();
+        context.getSharedPreferences("TripsApp",0).edit().commit();
     }
 
-    private long getSharedPrefValue(String key)
+    public static long getLongSharedPrefValue(Context context, String key)
     {
-        return getSharedPreferences("TripsApp",0).getLong(key, 0);
+        return context.getSharedPreferences("TripsApp",0).getLong(key, 0);
     }
 
-    public static String convertDateFormat(Date localdate, boolean useTime)
+    public static void setSharedPrefValue(Context context, String key, boolean value)
     {
+        context.getSharedPreferences("TripsApp",0).edit().putBoolean(key, value).apply();
+        context.getSharedPreferences("TripsApp",0).edit().commit();
+    }
+
+    public static boolean getBooleanSharedPrefValue(Context context, String key, boolean defValue)
+    {
+        return context.getSharedPreferences("TripsApp",0).getBoolean(key, defValue);
+    }
+
+    public static String convertDateFormat(Date localdate, boolean useTime) {
         DateFormat df = new SimpleDateFormat(useTime ? MIX_PANEL_DATE_TIME_FORMAT : MIX_PANEL_DATE_FORMAT);
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
         String gmtTime = df.format(localdate);
