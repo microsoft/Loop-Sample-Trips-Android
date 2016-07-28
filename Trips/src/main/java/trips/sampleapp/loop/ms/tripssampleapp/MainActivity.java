@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -56,10 +58,17 @@ public class MainActivity extends AppCompatActivity
     private TextView locationText;
     private static Drives localDrives;
     private static Trips localTrips;
+    private TextView termsTextView;
+    private TextView privacyTextView;
+
 
     private static RelativeLayout enableLocation;
 
     private NavigationView navigationView;
+
+    private static String Loop_URL = "https://www.loop.ms/";
+    private static String TOU_URL = "http://go.microsoft.com/fwlink/?LinkID=530144";
+    private static String PRIVACY_URL = "http://go.microsoft.com/fwlink/?LinkId=521839";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +117,8 @@ public class MainActivity extends AppCompatActivity
                     navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     clipboard.setText(LoopSDK.userId);
-                    Toast.makeText(MainActivity.this, "User id copied to clipboard", Toast.LENGTH_SHORT).show();
-                    return true;
+                    openUrlInBrowser(Loop_URL);
+                    return false;
                 }
             }
 
@@ -127,12 +136,13 @@ public class MainActivity extends AppCompatActivity
             //the method we have create in activity
             ViewUtils.applyFontToMenuItem(this, mi,"Roboto-Medium");
             if (mi.getItemId() == R.id.nav_version){
-                mi.setTitle(BuildConfig.VERSION_NAME);
+              //  mi.setTitle(BuildConfig.VERSION_NAME);
             }
         }
 
         navigationView.getMenu().getItem(0).setChecked(true);
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
+
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
         List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
         adapter = new TripsViewAdapter(this,
@@ -147,6 +157,7 @@ public class MainActivity extends AppCompatActivity
             }
             @Override
             public void onItemAdded(String entityId) {
+                SampleAppApplication.mixpanel.track("Drive created");
             }
 
             @Override
@@ -159,6 +170,7 @@ public class MainActivity extends AppCompatActivity
             }
             @Override
             public void onItemAdded(String entityId) {
+                SampleAppApplication.mixpanel.track("Trip created");
             }
 
             @Override
@@ -189,6 +201,25 @@ public class MainActivity extends AppCompatActivity
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
         enableLocation = (RelativeLayout) this.findViewById(R.id.locationstrackingcontainer);
+
+        termsTextView = (TextView) navigationView.findViewById(R.id.terms);
+
+        termsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrlInBrowser(TOU_URL);
+            }
+        });
+
+        privacyTextView = (TextView) navigationView.findViewById(R.id.privacy);
+
+        privacyTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrlInBrowser(PRIVACY_URL);
+            }
+        });
+
     }
 
 
@@ -255,7 +286,11 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_trips) {
 
-        }
+        } else if (id == R.id.nav_version) {
+            return false;
+
+    }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -305,5 +340,10 @@ public class MainActivity extends AppCompatActivity
                 adapter.update(finalDrives);
             }
         });
+    }
+
+    public void openUrlInBrowser(String url){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 }
