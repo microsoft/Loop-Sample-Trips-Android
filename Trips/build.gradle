@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7.27"
+        versionName "0.7.28"
         multiDexEnabled true
 
         buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'

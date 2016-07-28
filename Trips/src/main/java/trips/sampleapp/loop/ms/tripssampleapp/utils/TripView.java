@@ -2,6 +2,7 @@ package trips.sampleapp.loop.ms.tripssampleapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import ms.loop.loopsdk.profile.Drive;
+import ms.loop.loopsdk.profile.KnownLocation;
 import ms.loop.loopsdk.profile.Trip;
+import trips.sampleapp.loop.ms.tripssampleapp.MainActivity;
 import trips.sampleapp.loop.ms.tripssampleapp.R;
 
 /**
@@ -26,10 +30,15 @@ public class TripView {
     private TextView txtTime;
     private TextView txtDuration;
     private TextView txtDistance;
+    private TextView txtSample;
+
     private ImageView imgDirectionIcon;
     private ImageView imgDirectionIcon2;
     private ImageView driveToUnknown;
     private ImageView driveFromUnknown;
+
+    private ImageView toKnownLocation;
+    private ImageView fromKnownLocation;
 
     private final SimpleDateFormat dateFormatWithDay = new SimpleDateFormat("MM/dd h:mm a", Locale.US);
     private final SimpleDateFormat dateFormat        = new SimpleDateFormat("h:mm a", Locale.US);
@@ -45,6 +54,9 @@ public class TripView {
         imgDirectionIcon2 = (ImageView) view.findViewById(R.id.drive_direction_icon2);
         driveFromUnknown = (ImageView) view.findViewById(R.id.drive_from_location_unknwon);
         driveToUnknown = (ImageView) view.findViewById(R.id.drive_to_location_unknwon);
+        txtSample = (TextView) view.findViewById(R.id.sample_trip);
+        toKnownLocation = (ImageView) view.findViewById(R.id.to_knownLocation);
+        fromKnownLocation = (ImageView) view.findViewById(R.id.from_knownLocation);
     }
     public void update(Context context, Trip trip){
         txtDriveFrom.setText(getTripStartLocation(trip));
@@ -62,6 +74,59 @@ public class TripView {
         txtDistance.setText(getTripDistance(trip));
         txtTime.setText(getTripTimeInfo(trip));
         txtDuration.setText(getTripDuration(trip));
+
+        if (trip.entityId.startsWith("test")) {
+            txtSample.setVisibility(View.VISIBLE);
+            if(trip instanceof Drive){
+                txtSample.setText("SAMPLE DRIVE");
+            }
+            else {
+                txtSample.setText("SAMPLE TRIP");
+            }
+
+        }
+        else {
+            txtSample.setVisibility(View.GONE);
+        }
+
+        toKnownLocation.setVisibility(View.GONE);
+        fromKnownLocation.setVisibility(View.GONE);
+
+        if (MainActivity.isKnownLocation(trip.startLocation, "work")){
+
+            String uri = "@drawable/ic_work";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            fromKnownLocation.setImageDrawable(res);
+            fromKnownLocation.setVisibility(View.VISIBLE);
+        }
+        if (MainActivity.isKnownLocation(trip.startLocation, "home")){
+
+            String uri = "@drawable/ic_home";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            fromKnownLocation.setImageDrawable(res);
+            fromKnownLocation.setVisibility(View.VISIBLE);
+
+        }
+        if ((imgDirectionIcon2.getVisibility() == View.GONE) && MainActivity.isKnownLocation(trip.endLocation, "work")){
+
+            String uri = "@drawable/ic_work";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            toKnownLocation.setImageDrawable(res);
+            toKnownLocation.setVisibility(View.VISIBLE);
+
+        }
+        if ((imgDirectionIcon2.getVisibility() == View.GONE) && MainActivity.isKnownLocation(trip.endLocation, "home")){
+            String uri = "@drawable/ic_home";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            toKnownLocation.setImageDrawable(res);
+            toKnownLocation.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     private String getTripStartLocation(Trip trip) {

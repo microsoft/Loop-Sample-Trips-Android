@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +36,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +50,14 @@ import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
+import ms.loop.loopsdk.profile.KnownLocation;
+import ms.loop.loopsdk.profile.Label;
+import ms.loop.loopsdk.profile.Labels;
+import ms.loop.loopsdk.profile.Locations;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
+import ms.loop.loopsdk.providers.LoopLocationProvider;
+import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
 import trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTypefaceSpan;
 import trips.sampleapp.loop.ms.tripssampleapp.utils.ViewUtils;
@@ -57,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     private Switch locationSwitch;
     private TextView locationText;
     private static Drives localDrives;
+    private static Locations knownLocations;
     private static Trips localTrips;
     private TextView termsTextView;
     private TextView privacyTextView;
@@ -142,6 +157,15 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.getMenu().getItem(0).setChecked(true);
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
+        knownLocations = Locations.createAndLoad(Locations.class, KnownLocation.class);
+
+        KnownLocation knownLocation = knownLocations.createItem(new Location("gps"));
+        knownLocation.entityId = "nA6erglToho99RwhQi4PDcSf6gsa+3XU3fkv8ppSpoI=";
+        knownLocation.labels.add("home");
+
+        KnownLocation knownLocation1 = knownLocations.createItem(new Location("gps"));
+        knownLocation1.entityId = "nA6erglToho99RwhQi4PDcSf6gsa+3XU3fkv8ppSpoH=";
+        knownLocation1.labels.add("work");
 
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
         List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
@@ -192,11 +216,15 @@ public class MainActivity extends AppCompatActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 boolean isLocationOn = SampleAppApplication.isLocationTurnedOn(MainActivity.this);
-                if (isChecked && !isLocationOn)
-                    SampleAppApplication.openLocationServiceSettingPage(MainActivity.this);
-
-                else if (!isChecked && isLocationOn)
-                    SampleAppApplication.openLocationServiceSettingPage(MainActivity.this);
+                if (isChecked) {
+                    if (!isLocationOn) {
+                        SampleAppApplication.openLocationServiceSettingPage(MainActivity.this);
+                    }
+                    LoopLocationProvider.start(SignalConfig.SIGNAL_SEND_MODE_BATCH);
+                }
+                else {
+                    LoopLocationProvider.stop();
+                }
 
                 SampleAppApplication.setSharedPrefValue(getApplicationContext(), "AppTracking", isChecked);
             }
@@ -247,7 +275,13 @@ public class MainActivity extends AppCompatActivity
         localDrives.download(true, new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
-                updateDrivesInUI();}
+
+                if (itemCount == 0)
+                {
+                    loadSampleDrives();
+                }
+                updateDrivesInUI();
+            }
 
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
@@ -256,6 +290,11 @@ public class MainActivity extends AppCompatActivity
         localTrips.download(true, new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
+
+                if (itemCount == 0)
+                {
+                    loadSampleTrips();
+                }
                 updateDrivesInUI();}
 
             @Override
@@ -356,5 +395,62 @@ public class MainActivity extends AppCompatActivity
     public String checkSelectedItemType() {
         final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         return (String) titleTextView.getText();
+    }
+
+    public void loadSampleDrives()
+    {
+        try {
+            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_drives.json"));
+            for (int i =0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                localDrives.createAndAddItem(jsonObject);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadSampleTrips()
+    {
+        try {
+            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_trips.json"));
+            for (int i =0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                localTrips.createAndAddItem(jsonObject);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
+            InputStream is = getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    public static boolean isKnownLocation(String entityId, String knownLocationType)
+    {
+        KnownLocation knownLocation = knownLocations.byEntityId(entityId);
+        if (knownLocation == null || !knownLocation.isValid()) return false;
+        Labels labels = knownLocation.labels;
+
+        for (Label label:labels){
+            if (label.name.equalsIgnoreCase(knownLocationType))
+                return true;
+        }
+        return false;
     }
 }

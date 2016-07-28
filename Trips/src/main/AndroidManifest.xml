@@ -48,7 +48,8 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".MainActivity"
-            android:label=""></activity>
+            android:label=""
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
