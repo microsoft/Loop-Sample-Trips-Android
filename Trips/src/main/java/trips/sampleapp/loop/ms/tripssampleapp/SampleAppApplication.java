@@ -11,6 +11,13 @@ import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import ms.loop.loopsdk.core.ILoopSDKCallback;
 import ms.loop.loopsdk.core.ISignalListener;
 import ms.loop.loopsdk.core.LoopSDK;
@@ -30,10 +37,13 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     private static KnownLocationProcessor knownLocationProcessor ;
     private static Context applicationContext;
     private static boolean sdkInitialized = false;
+    private static String DAYS_IN_APP_KEY = "days_in_app_key";
+    private static String MIX_PANEL_DATE_FORMAT = "yyyy-MM-dd'T'00:00:00";  // mixpanel dateformat
+    private static String MIX_PANEL_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";  // mixpanel dateformat
 
     public static TripProcessor tripProcessor;
     public static DriveProcessor driveProcessor;
-
+    public static MixpanelAPI mixpanel;
 
     @Override
     public void onCreate() {
@@ -50,6 +60,20 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
         LoopSDK.initialize(this, appId, appToken);
         applicationContext = this;
+
+        String projectToken = BuildConfig.MIXPANEL_TOKEN;
+        mixpanel = MixpanelAPI.getInstance(this, projectToken);
+
+        if (getSharedPrefValue(DAYS_IN_APP_KEY) == 0)
+        {
+            setSharedPrefValue(DAYS_IN_APP_KEY, System.currentTimeMillis());
+            MixpanelAPI.People people = mixpanel.getPeople();
+            people.identify(mixpanel.getDistinctId());
+            String dateFirstSeen = convertDateFormat(new Date(), false);
+            people.setOnce("FirstSeen", dateFirstSeen);
+            mixpanel.track("New User");
+        }
+        mixpanel.track("App Launched");
     }
     @Override
     public void onInitialized() {
@@ -73,8 +97,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             // register signal listeners
             LoopSDK.registerSignalListener("drives", "*", new ISignalListener() {
                 @Override
-                public void onSignal(Signal signal) {
-                }
+                public void onSignal(Signal signal) {}
             });
 
             LoopLocationProvider.registerCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
@@ -129,4 +152,24 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
             context.startActivity(locationIntent);
         }
     }
+
+    private void setSharedPrefValue(String key, long value)
+    {
+        getSharedPreferences("TripsApp",0).edit().putLong(key, value).apply();
+        getSharedPreferences("TripsApp",0).edit().commit();
+    }
+
+    private long getSharedPrefValue(String key)
+    {
+        return getSharedPreferences("TripsApp",0).getLong(key, 0);
+    }
+
+    public static String convertDateFormat(Date localdate, boolean useTime)
+    {
+        DateFormat df = new SimpleDateFormat(useTime ? MIX_PANEL_DATE_TIME_FORMAT : MIX_PANEL_DATE_FORMAT);
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String gmtTime = df.format(localdate);
+        return gmtTime;
+    }
+
 }

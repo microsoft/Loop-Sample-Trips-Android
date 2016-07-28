@@ -9,12 +9,13 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7.26"
+        versionName "0.7.27"
         multiDexEnabled true
 
         buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'
         buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPS_APP_TOKEN_PROP + '\"'
         buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
+        buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + MIXPANEL_TOKEN + '\"'
     }
     dexOptions {
         dexInProcess = false
@@ -58,4 +59,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile "com.mixpanel.android:mixpanel-android:4.+"
 }
