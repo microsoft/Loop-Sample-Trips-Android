@@ -1,18 +1,22 @@
-# Loop Sample Trips/Drives
+# LOOP Sample Trips/Drives
 
-These instructions will get you a copy of a Loop sample app that will download user trips generated in the Loop platform and display them.
+## Prerequisites:
+  * Android 4.4+
 
-  0. If you haven’t already, signup for a Loop account and create an app on the [Loop Developer Site](https://www.loop.ms)
+## Build instructions:
+These instructions will get you a copy of the Location and Observation Platform (LOOP) sample app that will download and display trips.
+
+  0. Signup for a Loop account and create an app on the [Loop Developer Site](https://www.loop.ms)
   0. Get the sample app
     0. Clone this sample app `https://github.com/Microsoft/Loop-Sample-Trips-Android.git`
     0. Open it in Android Studio
-    0. Add your appId and appToken in `SampleApplication.java OnCreate`
+    0. Add your appId and appToken in `SampleApplication.java` in the `onCreate()` method
 
     ```
         String appId = "YOUR_APP_ID";
         String appToken = "YOUR_APP_TOKEN";
     ```
-  0. Create test users in your user dashboard (user link in the left navigation)
+  0. Create test users in the user dashboard at the [LOOP Developer Site](https://www.loop.ms)
   0. Fill in the userId and deviceId in `LoopTestUserApplication.java OnCreate` with a test user's userId and deviceId obtained from the [Loop Developer Site](https://www.loop.ms)
 
     ```
@@ -21,7 +25,7 @@ These instructions will get you a copy of a Loop sample app that will download u
         
         LoopSDK.initialize(this, appId, appToken, userId, deviceId);
     ```
-  0. If you don't require a specific userId and deviceId you can skip the previous step and instead initialize the Loop SDK with the following line:
+  0. (optional) If you don't require a specific userId and deviceId, skip the previous step. Instead, initialize the SDK with the following:
 
     ```
         LoopSDK.initialize(this, appId, appToken);
