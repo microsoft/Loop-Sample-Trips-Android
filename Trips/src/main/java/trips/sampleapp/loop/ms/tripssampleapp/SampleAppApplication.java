@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,7 +26,6 @@ import ms.loop.loopsdk.processors.DriveProcessor;
 import ms.loop.loopsdk.processors.KnownLocationProcessor;
 import ms.loop.loopsdk.processors.TripProcessor;
 import ms.loop.loopsdk.profile.KnownLocation;
-import ms.loop.loopsdk.providers.LoopLocation;
 import ms.loop.loopsdk.providers.LoopLocationProvider;
 import ms.loop.loopsdk.signal.Signal;
 import ms.loop.loopsdk.signal.SignalConfig;
@@ -100,11 +100,11 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
 
             LoopLocationProvider.registerCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
                 @Override
-                public void onLocationChanged(LoopLocation location) {
+                public void onLocationChanged(Location location) {
                 }
 
                 @Override
-                public void onModeChanged(int modeFrom, int modeTo, LoopLocation location) {}
+                public void onModeChanged(int modeFrom, int modeTo, Location location) {}
                 @Override
                 public void onKnownLocationEntered(KnownLocation location) {}
                 @Override

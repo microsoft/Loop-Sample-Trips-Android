@@ -15,5 +15,6 @@
     <string name="back_to_main">Back to main view</string>
     <string name="title_activity_maps2">Map</string>
     <string name="about">ABOUT</string>
+    <string name="title_activity_maps1">Map</string>
 
 </resources>

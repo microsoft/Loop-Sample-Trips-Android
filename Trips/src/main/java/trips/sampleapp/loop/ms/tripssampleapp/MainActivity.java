@@ -159,14 +159,6 @@ public class MainActivity extends AppCompatActivity
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
         knownLocations = Locations.createAndLoad(Locations.class, KnownLocation.class);
 
-        KnownLocation knownLocation = knownLocations.createItem(new Location("gps"));
-        knownLocation.entityId = "nA6erglToho99RwhQi4PDcSf6gsa+3XU3fkv8ppSpoI=";
-        knownLocation.labels.add("home");
-
-        KnownLocation knownLocation1 = knownLocations.createItem(new Location("gps"));
-        knownLocation1.entityId = "nA6erglToho99RwhQi4PDcSf6gsa+3XU3fkv8ppSpoH=";
-        knownLocation1.labels.add("work");
-
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
         List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
         adapter = new TripsViewAdapter(this,
