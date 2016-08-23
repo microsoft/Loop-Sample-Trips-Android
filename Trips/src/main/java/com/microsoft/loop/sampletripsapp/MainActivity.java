@@ -1,24 +1,15 @@
-package trips.sampleapp.loop.ms.tripssampleapp;
+package com.microsoft.loop.sampletripsapp;
 
 import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationProvider;
+import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Spannable;
-import android.text.SpannableString;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,13 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.microsoft.loop.sampletripsapp.utils.ViewUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +36,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ms.loop.loopsdk.core.ILoopServiceCallback;
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Drives;
@@ -59,8 +51,6 @@ import ms.loop.loopsdk.profile.Trips;
 import ms.loop.loopsdk.providers.LoopLocationProvider;
 import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTypefaceSpan;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.ViewUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -127,12 +117,10 @@ public class MainActivity extends AppCompatActivity
                     break;
                 }
 
-                case R.id.nav_version: {
+                case R.id.nav_version:
+                case R.id.helpusimprove:{
                     navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
                     navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    clipboard.setText(LoopSDK.userId);
-                    openUrlInBrowser(Loop_URL);
                     return false;
                 }
             }
@@ -241,6 +229,41 @@ public class MainActivity extends AppCompatActivity
                 openUrlInBrowser(PRIVACY_URL);
             }
         });
+
+        final SwitchCompat helpusImproveSwitch =  (SwitchCompat)navigationView.getMenu().getItem(3).getActionView();
+        helpusImproveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                helpusImproveSwitch.getThumbDrawable().clearColorFilter();
+                int colorPrimaryDark = getResources().getColor(R.color.drawerIcon);
+                int r = (colorPrimaryDark >> 16) & 0xFF;
+                int g = (colorPrimaryDark >> 8) & 0xFF;
+                int b = (colorPrimaryDark >> 0) & 0xFF;
+                r = (r - 30 < 0) ? 0 : r - 30;
+                g = (g - 30 < 0) ? 0 : g - 30;
+                b = (b - 30 < 0) ? 0 : b - 30;
+                int darker = Color.rgb(r, g, b);
+                helpusImproveSwitch.getTrackDrawable().setColorFilter(darker, PorterDuff.Mode.SRC_IN);
+
+                if (!isChecked && LoopSDK.isInitialized()) {
+                    LoopSDK.deleteUser(new ILoopServiceCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void value) {
+                            SampleAppApplication.setSharedPrefValue(getApplicationContext(), "helpusimprove", false);
+                            LoopSDK.unInitialize();
+                        }
+
+                        @Override
+                        public void onError(LoopError error) {}
+                    });
+                }
+                else{
+                    SampleAppApplication.instance.initializeLoopSDK();
+                    SampleAppApplication.setSharedPrefValue(getApplicationContext(), "helpusimprove", true);
+                }
+            }
+        });
     }
 
 
@@ -298,7 +321,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         loadDrivesAndTrips();
-        checkTrackingEnbaled();
+        checkTrackingEnabled();
     }
 
     @Override
@@ -314,7 +337,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_drives) {
         } else if (id == R.id.nav_trips) {
-        } else if (id == R.id.nav_version) {
+        } else if (id == R.id.nav_version || id == R.id.helpusimprove) {
             return false;
         }
 
@@ -323,28 +346,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void checkTrackingEnbaled() {
-        if (SampleAppApplication.getBooleanSharedPrefValue(this.getApplicationContext(), "AppTracking", true)) {
+    public void checkTrackingEnabled() {
 
-            if (checkSelectedItemType().equals("TRIPS")){
-                locationText.setText(this.getText(R.string.trips_recording_on));
-            }
-            else {
-                locationText.setText(this.getText(R.string.drives_recording_on));
-            }
+        boolean tracking = SampleAppApplication.getBooleanSharedPrefValue(this.getApplicationContext(), "AppTracking", true);
+        String mode = tracking ? "ON" : "OFF";
+        locationText.setText(String.format("%s RECORDING %s",checkSelectedItemType(), mode));
+        locationSwitch.setChecked(tracking);
 
-            locationSwitch.setChecked(true);
-            //enableLocation.setVisibility(View.GONE);
-        } else {
-            if (checkSelectedItemType().equals("TRIPS")){
-                locationText.setText(this.getText(R.string.trips_recording_off));
-            }
-            else {
-                locationText.setText(this.getText(R.string.drives_recording_off));
-            }
-            locationSwitch.setChecked(false);
-           // enableLocation.setVisibility(View.VISIBLE);
-        }
+        boolean helpusimprove = SampleAppApplication.getBooleanSharedPrefValue(getApplicationContext(), "helpusimprove", true);
+
+        final SwitchCompat helpusImproveSwitch =  (SwitchCompat)navigationView.getMenu().getItem(3).getActionView();
+        helpusImproveSwitch.setChecked(helpusimprove);
     }
 
     public void updateDrivesInUI() {
@@ -389,8 +401,7 @@ public class MainActivity extends AppCompatActivity
         return (String) titleTextView.getText();
     }
 
-    public void loadSampleDrives()
-    {
+    public void loadSampleDrives() {
         try {
             JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_drives.json"));
             for (int i =0; i < jsonArray.length(); i++){

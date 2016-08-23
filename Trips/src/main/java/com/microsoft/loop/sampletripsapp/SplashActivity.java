@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp;
+package com.microsoft.loop.sampletripsapp;
 
 import android.content.Intent;
 import android.os.Handler;

@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp;
+package com.microsoft.loop.sampletripsapp;
 
 /**
  * Created by on 5/24/16.
@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.microsoft.loop.sampletripsapp.utils.TripView;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,6 @@ import java.util.List;
 import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Visit;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.TripView;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.ViewUtils;
 
 
 public class TripsViewAdapter extends ArrayAdapter<Trip> {

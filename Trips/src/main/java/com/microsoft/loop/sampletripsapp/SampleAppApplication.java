@@ -1,19 +1,17 @@
-package trips.sampleapp.loop.ms.tripssampleapp;
+package com.microsoft.loop.sampletripsapp;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
-import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import io.fabric.sdk.android.Fabric;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,34 +29,30 @@ import ms.loop.loopsdk.signal.Signal;
 import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
 
+
 public class SampleAppApplication extends MultiDexApplication implements ILoopSDKCallback {
 
     private static final String TAG = SampleAppApplication.class.getSimpleName();
     private static KnownLocationProcessor knownLocationProcessor ;
-    private static Context applicationContext;
+
     private static boolean sdkInitialized = false;
     private static String DAYS_IN_APP_KEY = "days_in_app_key";
     private static String MIX_PANEL_DATE_FORMAT = "yyyy-MM-dd'T'00:00:00";  // mixpanel dateformat
     private static String MIX_PANEL_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";  // mixpanel dateformat
 
+    public static SampleAppApplication instance;
     public static TripProcessor tripProcessor;
     public static DriveProcessor driveProcessor;
     public static MixpanelAPI mixpanel;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
-        
-        // initialize the Loop SDK. create an account to get your appId and appToken
+        Fabric.with(this, new Crashlytics());
 
-        String appId = BuildConfig.APP_ID; // Or replace your id here
-        String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
-
-        String userId = "YOUR USER ID";
-        String deviceId = "YOUR DEVICE ID";
-
-        LoopSDK.initialize(this, appId, appToken);
-        applicationContext = this;
+        initializeLoopSDK();
+        instance = this;
 
         String projectToken = BuildConfig.MIXPANEL_TOKEN;
         mixpanel = MixpanelAPI.getInstance(this, projectToken);
@@ -73,6 +67,21 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         }
         mixpanel.track("App Launched");
     }
+
+    public void initializeLoopSDK(){
+        // initialize the Loop SDK. create an account to get your appId and appToken
+
+        String appId = BuildConfig.APP_ID; // Or replace your id here
+        String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
+
+        LoopSDK.initialize(this, appId, appToken);
+
+        String userId = "YOUR USER ID";
+        String deviceId = "YOUR DEVICE ID";
+
+        //LoopSDK.initialize(this, appId, appToken, userId, deviceId);
+    }
+
     @Override
     public void onInitialized() {
 

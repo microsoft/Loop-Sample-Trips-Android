@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:customTextView="https://schemas.android.com/apk/res/trips.sampleapp.loop.ms.tripssampleapp.utils"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryLight"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="trips.sampleapp.loop.ms.tripssampleapp.MainActivity"
+    tools:context=".MainActivity"
     tools:ignore="all"
     tools:showIn="@layout/app_bar_main">
 
@@ -27,7 +27,7 @@
             android:layout_below="@+id/imageView2">
 
 
-            <trips.sampleapp.loop.ms.tripssampleapp.utils.CustomTextView
+            <com.microsoft.loop.sampletripsapp.utils.CustomTextView
                 android:id="@+id/txtlocationtracking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

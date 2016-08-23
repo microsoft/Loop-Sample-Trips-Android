@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp;
+package com.microsoft.loop.sampletripsapp;
 
 import android.content.ClipboardManager;
 import android.graphics.Color;
@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.microsoft.loop.sampletripsapp.utils.TripView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,8 +41,7 @@ import ms.loop.loopsdk.profile.GeospatialPoint;
 import ms.loop.loopsdk.profile.Path;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.TripView;
-import trips.sampleapp.loop.ms.tripssampleapp.utils.ViewUtils;
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -97,7 +97,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        viewGroup.setOnClickListener(new View.OnClickListener() {
+    /*    viewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -119,7 +119,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 clipboard.setText(queryDate);
                 Toast.makeText(MapsActivity.this, "Elastic search query copied", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     @Override

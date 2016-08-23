@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp.utils;
+package com.microsoft.loop.sampletripsapp.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -12,7 +12,7 @@ public class CustomTextView extends TextView {
 
     private  String fontName = "";
     private final String fontNameFileType = ".ttf";
-    private final String namespace = "https://schemas.android.com/apk/res/trips.sampleapp.loop.ms.tripssampleapp.utils";
+    private final String namespace = "https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils";
 
     public CustomTextView(Context context) {
         super(context);

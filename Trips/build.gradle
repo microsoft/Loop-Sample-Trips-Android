@@ -1,15 +1,30 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "trips.sampleapp.loop.ms.tripssampleapp"
+        applicationId "com.microsoft.loop.sampletripsapp"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7.28"
+        versionName "0.8.14"
         multiDexEnabled true
 
         buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'
@@ -23,9 +38,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
     }
 
     lintOptions {
@@ -52,9 +74,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile('ms.loop:loopsdk:2.0.8-develop') { changing = true }
+    compile('ms.loop:loopsdk:2.0.9-develop-fusedlocation') { changing = true }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.android.gms:play-services:9.2.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'

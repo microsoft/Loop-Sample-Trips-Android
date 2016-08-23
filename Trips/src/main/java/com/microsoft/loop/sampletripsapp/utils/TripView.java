@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp.utils;
+package com.microsoft.loop.sampletripsapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,14 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.microsoft.loop.sampletripsapp.MainActivity;
+import com.microsoft.loop.sampletripsapp.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import ms.loop.loopsdk.profile.Drive;
-import ms.loop.loopsdk.profile.KnownLocation;
+
 import ms.loop.loopsdk.profile.Trip;
-import trips.sampleapp.loop.ms.tripssampleapp.MainActivity;
-import trips.sampleapp.loop.ms.tripssampleapp.R;
+
 
 /**
  * Created on 6/22/16.

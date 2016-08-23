@@ -22,6 +22,18 @@
             android:icon="@drawable/ic_app_menu_icon"
             android:actionMenuTextColor="@color/action_menu_unselected_color"
             android:textSize="38sp"/>
+    </group>
+
+    <group
+        android:id="@+id/group_helpusimprove"
+        android:checkableBehavior="single">
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/helpusimprove"
+            android:title="@string/helpusimprove"
+            android:checked="true"
+            android:actionMenuTextColor="@color/action_menu_unselected_color"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
 
     </group>
 </menu>

@@ -1,4 +1,4 @@
-package trips.sampleapp.loop.ms.tripssampleapp.utils;
+package com.microsoft.loop.sampletripsapp.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
