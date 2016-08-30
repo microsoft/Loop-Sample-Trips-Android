@@ -3,8 +3,10 @@ package com.microsoft.loop.sampletripsapp.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.microsoft.loop.sampletripsapp.MainActivity;
 import com.microsoft.loop.sampletripsapp.R;
+import com.microsoft.loop.sampletripsapp.SampleAppApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -45,6 +48,9 @@ public class TripView {
     private final SimpleDateFormat dateFormatWithDay = new SimpleDateFormat("MM/dd h:mm a", Locale.US);
     private final SimpleDateFormat dateFormat        = new SimpleDateFormat("h:mm a", Locale.US);
 
+    private Context mContext;
+
+
     public TripView(View view) {
 
         txtTime = (TextView) view.findViewById(R.id.drive_time);
@@ -60,7 +66,10 @@ public class TripView {
         toKnownLocation = (ImageView) view.findViewById(R.id.to_knownLocation);
         fromKnownLocation = (ImageView) view.findViewById(R.id.from_knownLocation);
     }
-    public void update(Context context, Trip trip){
+    public void update(Context context, Trip trip, boolean singleView){
+
+        mContext = context;
+        //txtDriveFrom.setMaxWidth(getTextWidthInDip(90));
         txtDriveFrom.setText(getTripStartLocation(trip));
 
         String strEndPlace = getTripEndLocation(trip);
@@ -77,7 +86,7 @@ public class TripView {
         txtTime.setText(getTripTimeInfo(trip));
         txtDuration.setText(getTripDuration(trip));
 
-        if (trip.entityId.startsWith("test")) {
+        if (trip.entityId.startsWith("test") &&!singleView) {
             txtSample.setVisibility(View.VISIBLE);
             if(trip instanceof Drive){
                 txtSample.setText("SAMPLE DRIVE");
@@ -126,7 +135,6 @@ public class TripView {
             Drawable res = context.getResources().getDrawable(imageResource);
             toKnownLocation.setImageDrawable(res);
             toKnownLocation.setVisibility(View.VISIBLE);
-
         }
 
     }
@@ -146,24 +154,28 @@ public class TripView {
         String start = TextUtils.isEmpty(trip.startLocale.getFriendlyName()) ? "Unknown" : trip.startLocale.getFriendlyName();
         String end = TextUtils.isEmpty(trip.endLocale.getFriendlyName()) ? "Unknown" : trip.endLocale.getFriendlyName();
 
-        if (start.equals("unknown")){
+        if (start.equals("unknown") && SampleAppApplication.isNetworkAvailable(mContext)){
             trip.updateStartLocale();
         }
-        if (end.equals("unknown")){
+        if (end.equals("unknown") && SampleAppApplication.isNetworkAvailable(mContext)){
             trip.updateEndLocale();
         }
 
         if (start.equalsIgnoreCase(end)) {
             driveToUnknown.setVisibility(View.GONE);
+            txtDriveTo.setVisibility(View.GONE);
+           // txtDriveFrom.setMaxWidth(getTextWidthInDip(170));
             return "";
         }
+
+        txtDriveTo.setVisibility(View.VISIBLE);
 
         if (end.equals("unknown")) {
             driveToUnknown.setVisibility(View.VISIBLE);
         } else {
             driveToUnknown.setVisibility(View.GONE);
         }
-        return end.toUpperCase(Locale.US);
+        return trip.endLocale.getFriendlyName().toUpperCase(Locale.US);
     }
 
     private String getTripDistance(Trip trip) {
@@ -194,12 +206,18 @@ public class TripView {
 
         return String.format(Locale.US,
                 "%s%d:%s%d:%s%d",
-                diff[0] < 9 ? "0" : "",
+                diff[0] <= 9 ? "0" : "",
                 diff[0],
-                diff[1] < 9 ? "0": "",
+                diff[1] <= 9 ? "0": "",
                 diff[1],
-                diff[2] < 9 ? "0":"",
+                diff[2] <= 9 ? "0":"",
                 diff[2]);
+    }
+
+    private int getTextWidthInDip(int width){
+        int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                (float) 170, mContext.getResources().getDisplayMetrics());
+        return value;
     }
 
 }

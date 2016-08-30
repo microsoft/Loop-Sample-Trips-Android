@@ -14,6 +14,9 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+def mapsApiKey = TRIPS_APP_MAPS_KEY_PROP?: "";
+def fabricKey = FABRIC_KEY_PROP?: "";
+
 
 android {
     compileSdkVersion 23
@@ -23,19 +26,21 @@ android {
         applicationId "com.microsoft.loop.sampletripsapp"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "0.8.14"
+        versionCode 1004
+        versionName "1.0.0"
         multiDexEnabled true
 
         buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'
         buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPS_APP_TOKEN_PROP + '\"'
         buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
         buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + MIXPANEL_TOKEN + '\"'
+        manifestPlaceholders = [ mapsApiKey:mapsApiKey, fabricKey:fabricKey]
     }
     dexOptions {
         dexInProcess = false
         javaMaxHeapSize "2g"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -43,8 +48,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -65,7 +70,7 @@ android {
         variant.outputs.each { output ->
             output.outputFile = new File(
                     output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+                    output.outputFile.name.replace(".apk", ".apk"))
         }
     }
 }
@@ -74,15 +79,18 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile('ms.loop:loopsdk:2.0.9-develop-fusedlocation') { changing = true }
+    compile('ms.loop:loopsdk:2.0.2') { changing = true }
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.google.android.gms:play-services:9.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.mixpanel.android:mixpanel-android:4.+'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
 }

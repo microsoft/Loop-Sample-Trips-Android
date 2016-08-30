@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
     android:id="@+id/drivelistcontainer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" tools:ignore="all">
+    android:orientation="horizontal" tools:ignore="all"
+    android:weightSum = "100">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -14,13 +15,15 @@
         android:orientation="vertical"
         android:gravity="top"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:layout_weight="70">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <ImageView
                 android:id="@+id/drive_from_location_unknwon"
@@ -30,7 +33,8 @@
                 android:paddingRight="3dp"
                 android:visibility="gone"
                 android:src="@drawable/ic_location_unknown"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="5"/>
 
             <com.microsoft.loop.sampletripsapp.utils.CustomTextView
                 android:id="@+id/drive_from"
@@ -44,7 +48,8 @@
                 customTextView:fontName="Roboto-Regular"
                 android:maxWidth="90dip"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:layout_weight="30"/>
 
             <ImageView
                 android:id="@+id/from_knownLocation"
@@ -54,7 +59,8 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/ic_drive_direction2"
                 android:visibility="gone"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="10"/>
 
             <ImageView
                 android:id="@+id/drive_direction_icon"
@@ -63,7 +69,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_drive_direction"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="15"/>
 
             <ImageView
                 android:id="@+id/drive_direction_icon2"
@@ -73,7 +80,8 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/ic_drive_direction2"
                 android:visibility="gone"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="15"/>
 
             <ImageView
                 android:id="@+id/drive_to_location_unknwon"
@@ -83,7 +91,8 @@
                 android:paddingRight="3dp"
                 android:visibility="gone"
                 android:src="@drawable/ic_location_unknown"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="5"/>
 
             <com.microsoft.loop.sampletripsapp.utils.CustomTextView
                 android:id="@+id/drive_to"
@@ -96,9 +105,10 @@
                 android:textSize="16sp"
                 android:alpha="0.87"
                 customTextView:fontName="Roboto-Regular"
-                android:maxWidth="70dip"
+                android:maxWidth="90dip"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:layout_weight="25"/>
 
             <ImageView
                 android:id="@+id/to_knownLocation"
@@ -108,7 +118,8 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/ic_drive_direction2"
                 android:visibility="gone"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="10"/>
         </LinearLayout>
 
         <com.microsoft.loop.sampletripsapp.utils.CustomTextView
@@ -147,7 +158,8 @@
         android:orientation="vertical"
         android:paddingTop="15dp"
         android:paddingBottom="12dp"
-        android:gravity="top">
+        android:gravity="top"
+        android:layout_weight="30">
 
         <com.microsoft.loop.sampletripsapp.utils.CustomTextView
             android:id="@+id/drive_distance"
@@ -194,4 +206,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

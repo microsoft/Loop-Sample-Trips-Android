@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -51,7 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Drives drives;
     Trip trip;
     TripView tripView;
-    private ImageView backAction;
+    private View backAction;
     private ImageView deleteDriveAction;
 
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -75,7 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         tripView = new TripView(viewGroup);
 
-        backAction = (ImageView)findViewById(R.id.action_back_ic);
+        backAction = (View)findViewById(R.id.action_back_ic);
         deleteDriveAction = (ImageView)findViewById(R.id.action_delete_drive_ic);
 
         backAction.setClickable(true);
@@ -143,31 +144,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void drawPath() {
 
-        tripView.update(this, trip);
+        tripView.update(this, trip, true);
 
         GeospatialPoint firstPoint = trip.path.points.get(0);
 
         PolylineOptions options = new PolylineOptions()
                 .add(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees))
                 .width(10)
-                .color(Color.BLUE)
+                .color(R.color.mappath)
                 .geodesic(true).clickable(true);
 
         MarkerOptions startMarker = new MarkerOptions();
-        startMarker.position(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees)).title("Trip starts");
+        startMarker.position(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees)).title(trip.startLocale.getFriendlyName());
         startMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_trip_start));
 
 
-        mMap.addMarker(startMarker);
+        Marker marker = mMap.addMarker(startMarker);
+        marker.showInfoWindow();
         LatLng latLng = new LatLng(firstPoint.latDegrees, firstPoint.longDegrees);
         for (GeospatialPoint point: trip.path.points)
         {
             latLng = new LatLng(point.latDegrees,point.longDegrees);
             mMap.addCircle(new CircleOptions()
                     .center(latLng)
-                    .radius(20)
-                    .strokeColor(Color.RED)
-                    .fillColor(Color.RED));
+                    .radius(30)
+                    .strokeWidth(0)
+                    .strokeColor(R.color.mappathcircle)
+                    .fillColor(R.color.mappath));
 
             options.add(latLng);
         }
@@ -175,11 +178,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addPolyline(options);
 
         MarkerOptions endMarker = new MarkerOptions();
-        endMarker.position(latLng).title("Trip ends");
+        endMarker.position(latLng).title(trip.endLocale.getFriendlyName());
         endMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_trip_end));
 
-        mMap.addMarker(endMarker);
+        mMap.addMarker(endMarker).showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+
 
     }
 }

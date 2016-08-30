@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
 import com.microsoft.loop.sampletripsapp.utils.ViewUtils;
 
 import org.json.JSONArray;
@@ -60,11 +61,10 @@ public class MainActivity extends AppCompatActivity
     private ListView tripListView;
     private Switch locationSwitch;
     private TextView locationText;
-    private static Drives localDrives;
-    private static Locations knownLocations;
-    private static Trips localTrips;
+
     private TextView termsTextView;
     private TextView privacyTextView;
+    private TextView txtDescription;
 
 
     private static RelativeLayout enableLocation;
@@ -100,87 +100,50 @@ public class MainActivity extends AppCompatActivity
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 item.setChecked(true);
-            switch (id){
-                case R.id.nav_drives: {
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_drives_on));
-                    navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
-                    navigationView.getMenu().getItem(1).setChecked(false);
-                    updateDrivesInUI();
-                    break;
+                switch (id) {
+                    case R.id.nav_drives: {
+                        item.setIcon(getResources().getDrawable(R.drawable.ic_drives_on));
+                        navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
+                        navigationView.getMenu().getItem(1).setChecked(false);
+                        updateDrivesInUI();
+                        break;
+                    }
+
+                    case R.id.nav_trips: {
+                        item.setIcon(getResources().getDrawable(R.drawable.ic_trips_on));
+                        navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
+                        navigationView.getMenu().getItem(0).setChecked(false);
+                        updateDrivesInUI();
+                        break;
+                    }
+
+                    case R.id.nav_version:
+                    case R.id.helpusimprove: {
+                        navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
+                        navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
+                        item.setChecked(false);
+                        if (id == R.id.nav_version) {
+                            openUrlInBrowser(Loop_URL);
+                        }
+                        return false;
+                    }
                 }
 
-                case R.id.nav_trips: {
-                    item.setIcon(getResources().getDrawable(R.drawable.ic_trips_on));
-                    navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
-                    navigationView.getMenu().getItem(0).setChecked(false);
-                    updateDrivesInUI();
-                    break;
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
                 }
-
-                case R.id.nav_version:
-                case R.id.helpusimprove:{
-                    navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
-                    navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
-                    return false;
-                }
-            }
-
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-            return true;
+                return true;
             }
         });
 
         Menu m = navigationView.getMenu();
-        for (int i=0;i < m.size(); i++) {
+        for (int i = 0; i < m.size(); i++) {
             MenuItem mi = m.getItem(i);
-            //the method we have create in activity
-            ViewUtils.applyFontToMenuItem(this, mi,"Roboto-Medium");
-            if (mi.getItemId() == R.id.nav_version){
-              //  mi.setTitle(BuildConfig.VERSION_NAME);
-            }
+            ViewUtils.applyFontToMenuItem(this, mi, "Roboto-Medium");
         }
 
         navigationView.getMenu().getItem(0).setChecked(true);
-        localDrives = Drives.createAndLoad(Drives.class, Drive.class);
-        knownLocations = Locations.createAndLoad(Locations.class, KnownLocation.class);
-
-        localTrips = Trips.createAndLoad(Trips.class, Trip.class);
-        List<Trip> drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
-        adapter = new TripsViewAdapter(this,
-                R.layout.tripview, drives);
-
-        tripListView = (ListView)findViewById(R.id.tripslist);
-        tripListView.setAdapter(adapter);
-
-        localDrives.registerItemChangedCallback("Drives", new IProfileItemChangedCallback() {
-            @Override
-            public void onItemChanged(String entityId) {
-            }
-            @Override
-            public void onItemAdded(String entityId) {
-                SampleAppApplication.mixpanel.track("Drive created");
-            }
-
-            @Override
-            public void onItemRemoved(String entityId) {}
-        });
-
-        localTrips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback() {
-            @Override
-            public void onItemChanged(String entityId) {
-            }
-            @Override
-            public void onItemAdded(String entityId) {
-                SampleAppApplication.mixpanel.track("Trip created");
-            }
-
-            @Override
-            public void onItemRemoved(String entityId) {}
-        });
-
         IntentFilter intentFilter = new IntentFilter("android.intent.action.onInitialized");
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -188,6 +151,8 @@ public class MainActivity extends AppCompatActivity
                 loadDrivesAndTrips();
             }
         };
+
+        initLoopProfileItems();
         //registering our receiver
         this.registerReceiver(mReceiver, intentFilter);
 
@@ -198,18 +163,17 @@ public class MainActivity extends AppCompatActivity
                 boolean isLocationOn = SampleAppApplication.isLocationTurnedOn(MainActivity.this);
                 if (isChecked) {
                     if (!isLocationOn) {
-                        SampleAppApplication.openLocationServiceSettingPage(MainActivity.this);
+                        SampleAppApplication.instance.openLocationServiceSettingPage(MainActivity.this);
                     }
-                    LoopLocationProvider.start(SignalConfig.SIGNAL_SEND_MODE_BATCH);
+                       LoopUtils.startLocationProvider();
+                } else {
+                       LoopUtils.stopLocationProvider();
                 }
-                else {
-                    LoopLocationProvider.stop();
-                }
-
                 SampleAppApplication.setSharedPrefValue(getApplicationContext(), "AppTracking", isChecked);
             }
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
+        txtDescription = (TextView) this.findViewById(R.id.title_description);
         enableLocation = (RelativeLayout) this.findViewById(R.id.locationstrackingcontainer);
 
         termsTextView = (TextView) navigationView.findViewById(R.id.terms);
@@ -230,40 +194,49 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final SwitchCompat helpusImproveSwitch =  (SwitchCompat)navigationView.getMenu().getItem(3).getActionView();
-        helpusImproveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        final SwitchCompat helpusImproveSwitch = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
+        helpusImproveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                helpusImproveSwitch.getThumbDrawable().clearColorFilter();
-                int colorPrimaryDark = getResources().getColor(R.color.drawerIcon);
-                int r = (colorPrimaryDark >> 16) & 0xFF;
-                int g = (colorPrimaryDark >> 8) & 0xFF;
-                int b = (colorPrimaryDark >> 0) & 0xFF;
-                r = (r - 30 < 0) ? 0 : r - 30;
-                g = (g - 30 < 0) ? 0 : g - 30;
-                b = (b - 30 < 0) ? 0 : b - 30;
-                int darker = Color.rgb(r, g, b);
-                helpusImproveSwitch.getTrackDrawable().setColorFilter(darker, PorterDuff.Mode.SRC_IN);
+                int darker = Color.rgb(137, 137, 137);
+                if (!isChecked)
+                    helpusImproveSwitch.getTrackDrawable().setColorFilter(darker, PorterDuff.Mode.SRC_IN);
 
                 if (!isChecked && LoopSDK.isInitialized()) {
+                    SampleAppApplication.setSharedPrefValue(getApplicationContext(), "helpusimprove", false);
                     LoopSDK.deleteUser(new ILoopServiceCallback<Void>() {
                         @Override
                         public void onSuccess(Void value) {
-                            SampleAppApplication.setSharedPrefValue(getApplicationContext(), "helpusimprove", false);
                             LoopSDK.unInitialize();
+
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    adapter.update(new ArrayList<Trip>());
+                                }
+                            });
                         }
 
                         @Override
-                        public void onError(LoopError error) {}
+                        public void onError(LoopError error) {
+                        }
                     });
-                }
-                else{
+                } else {
                     SampleAppApplication.instance.initializeLoopSDK();
                     SampleAppApplication.setSharedPrefValue(getApplicationContext(), "helpusimprove", true);
                 }
             }
         });
+
+
+    }
+
+    public void initLoopProfileItems() {
+        List<Trip> drives = new ArrayList<Trip>(LoopUtils.getDrives());
+        adapter = new TripsViewAdapter(this,
+                R.layout.tripview, drives);
+
+        tripListView = (ListView) findViewById(R.id.tripslist);
+        tripListView.setAdapter(adapter);
     }
 
 
@@ -277,51 +250,39 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void loadDrivesAndTrips()
-    {
-        if (LoopSDK.isInitialized() && !TextUtils.isEmpty(LoopSDK.userId)) {
-            LoopSDK.forceSync();
-        }
-        if (localDrives.itemList.size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
+    public void loadDrivesAndTrips() {
+
+        checkTrackingEnabled();
+        if (LoopUtils.getDrives().size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
             updateDrivesInUI();
             return;
         }
 
-        localDrives.download(true, new IProfileDownloadCallback() {
+        LoopUtils.downloadDrives(new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
-
-                if (itemCount == 0)
-                {
-                    loadSampleDrives();
-                }
                 updateDrivesInUI();
             }
-
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
         });
 
-        localTrips.download(true, new IProfileDownloadCallback() {
+        LoopUtils.downloadTrips(new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
-
-                if (itemCount == 0)
-                {
-                    loadSampleTrips();
-                }
-                updateDrivesInUI();}
-
+                updateDrivesInUI();
+            }
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
         });
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadDrivesAndTrips();
-        checkTrackingEnabled();
     }
 
     @Override
@@ -350,18 +311,24 @@ public class MainActivity extends AppCompatActivity
 
         boolean tracking = SampleAppApplication.getBooleanSharedPrefValue(this.getApplicationContext(), "AppTracking", true);
         String mode = tracking ? "ON" : "OFF";
-        locationText.setText(String.format("%s RECORDING %s",checkSelectedItemType(), mode));
+        String type = checkSelectedItemType();
+        locationText.setText(String.format("%s RECORDING %s", type, mode));
         locationSwitch.setChecked(tracking);
 
         boolean helpusimprove = SampleAppApplication.getBooleanSharedPrefValue(getApplicationContext(), "helpusimprove", true);
 
-        final SwitchCompat helpusImproveSwitch =  (SwitchCompat)navigationView.getMenu().getItem(3).getActionView();
+        final SwitchCompat helpusImproveSwitch = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
         helpusImproveSwitch.setChecked(helpusimprove);
+
+        if (type.equalsIgnoreCase("trips")) {
+            txtDescription.setVisibility(View.VISIBLE);
+        } else {
+            txtDescription.setVisibility(View.GONE);
+        }
     }
 
     public void updateDrivesInUI() {
-        localDrives.load();
-        localTrips.load();
+       LoopUtils.loadItems();
         final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         String title = "";
         List<Trip> drives = new ArrayList<>();
@@ -369,12 +336,12 @@ public class MainActivity extends AppCompatActivity
         for (int i = 0; i < m.size(); i++) {
             MenuItem mi = m.getItem(i);
             if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
-                drives = new ArrayList<Trip>(localDrives.sortedByStartedAt());
+                drives = new ArrayList<Trip>(LoopUtils.getDrives());
                 title = "DRIVES";
                 break;
 
             } else if (mi.isChecked() && (mi.getItemId() == R.id.nav_trips || mi.getItemId() == R.id.nav_version)) {
-                drives = new ArrayList<Trip>(localTrips.sortedByStartedAt());
+                drives = new ArrayList<Trip>(LoopUtils.getTrips());
                 title = "TRIPS";
                 break;
             }
@@ -387,11 +354,12 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 titleTextView.setText(finalTitle);
                 adapter.update(finalDrives);
+                checkTrackingEnabled();
             }
         });
     }
 
-    public void openUrlInBrowser(String url){
+    public void openUrlInBrowser(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
@@ -401,56 +369,14 @@ public class MainActivity extends AppCompatActivity
         return (String) titleTextView.getText();
     }
 
-    public void loadSampleDrives() {
-        try {
-            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_drives.json"));
-            for (int i =0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                localDrives.createAndAddItem(jsonObject);
-            }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void loadSampleTrips()
-    {
-        try {
-            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_trips.json"));
-            for (int i =0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                localTrips.createAndAddItem(jsonObject);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String loadJSONFromAsset(String fileName) {
-        String json = null;
-        try {
-            InputStream is = getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    public static boolean isKnownLocation(String entityId, String knownLocationType)
-    {
-        KnownLocation knownLocation = knownLocations.byEntityId(entityId);
+    public static boolean isKnownLocation(String entityId, String knownLocationType) {
+        KnownLocation knownLocation = LoopUtils.getLocation(entityId);
         if (knownLocation == null || !knownLocation.isValid()) return false;
         Labels labels = knownLocation.labels;
 
-        for (Label label:labels){
+        for (Label label : labels) {
             if (label.name.equalsIgnoreCase(knownLocationType))
                 return true;
         }

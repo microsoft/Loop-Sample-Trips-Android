@@ -29,7 +29,7 @@
             android:layout_gravity="top"
             android:textSize="27sp"
             customTextView:fontName="DroidSansMono"
-            android:paddingLeft="16dp"
+            android:paddingLeft="0dp"
             android:id="@+id/toolbar_title" />
         </android.support.v7.widget.Toolbar>>
 

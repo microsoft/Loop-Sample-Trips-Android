@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
     android:background="@color/splash_background"
     tools:ignore="all">
 
-    <ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/splash"
-        android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:weightSum="1"
+        android:orientation="vertical">
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        <ImageView android:id="@+id/splashscreen" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/trips_splash"
+        android:gravity="center"
+        android:scaleType="center"
+            android:layout_weight="0.9"/>
+
+        <com.microsoft.loop.sampletripsapp.utils.CustomTextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="DEVELOPER SAMPLE TRIPS APP"
+            android:textAlignment="center"
+            android:gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:layout_weight="0.1"
+            customTextView:fontName="DroidSansMono"/>
+
+        </LinearLayout>
+
+
 </LinearLayout>

@@ -77,7 +77,7 @@ public class TripsViewAdapter extends ArrayAdapter<Trip> {
 
         if (trips.isEmpty()) return row;
         final Trip trip = (Trip) trips.get(position);
-        holder.update(context, trip);
+        holder.update(context, trip, false);
 
         row.setClickable(true);
 

@@ -1,5 +1,5 @@
 [{
-	"entityId": "testid1",
+	"entityId": "testtripid1",
 	"annotations": {},
 	"distanceTraveledInKilometers": 4.661534746022072,
 	"endLocale": {
@@ -52,7 +52,7 @@
 	"updatedAt": "2016-07-27T00:45:50.454Z",
 	"createdAt": "2016-07-27T00:45:50.454Z"
 }, {
-	"entityId": "testid2",
+	"entityId": "testtripid2",
 	"annotations": {},
 	"distanceTraveledInKilometers": 7.979471371620546,
 	"endLocale": {
@@ -133,7 +133,7 @@
 	"updatedAt": "2016-07-27T00:45:51.730Z",
 	"createdAt": "2016-07-27T00:45:51.730Z"
 }, {
-	"entityId": "testid3",
+	"entityId": "testtripid3",
 	"annotations": {},
 	"distanceTraveledInKilometers": 23.0096097621978,
 	"endLocale": {
@@ -242,7 +242,7 @@
 	"updatedAt": "2016-07-27T00:45:53.228Z",
 	"createdAt": "2016-07-27T00:45:53.228Z"
 }, {
-	"entityId": "testid4",
+	"entityId": "testtripid4",
 	"annotations": {},
 	"distanceTraveledInKilometers": 3.431,
 	"endLocale": {
@@ -302,7 +302,7 @@
 	"updatedAt": "2016-07-27T00:45:55.344Z",
 	"createdAt": "2016-07-27T00:45:55.344Z"
 }, {
-	"entityId": "testid5",
+	"entityId": "testtripid5",
 	"annotations": {},
 	"distanceTraveledInKilometers": 2.856,
 	"endLocale": {
