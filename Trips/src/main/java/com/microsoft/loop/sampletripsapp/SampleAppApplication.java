@@ -72,7 +72,6 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         instance = this;
 
         if (isLoopEnabled()) {
@@ -96,13 +95,13 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void initializeLoopSDK() {
 
         // initialize the Loop SDK. create an account to get your appId and appToken
-        String appId = BuildConfig.APP_ID; // Or replace your id here
-        String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
+        String appId = "YOUR_APP_ID";
+        String appToken = "YOUR_APP_TOKEN";
 
         LoopSDK.initialize(this, appId, appToken);
 
-        String userId = "YOUR USER ID"; // Or replace your user Id
-        String deviceId = "YOUR DEVICE ID"; // Or replace your device Id
+        String userId = "TEST_USER_USER_ID";
+        String deviceId = "TEST_USER_DEVICE_ID";
 
         //LoopSDK.initialize(this, appId, appToken, userId, deviceId);
     }

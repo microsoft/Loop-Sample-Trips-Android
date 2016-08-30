@@ -54,10 +54,6 @@
             android:label=""
             android:screenOrientation="portrait" />
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabricKey}" />
-
     </application>
 
 </manifest>
