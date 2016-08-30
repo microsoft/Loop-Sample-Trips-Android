@@ -31,6 +31,7 @@ import ms.loop.loopsdk.profile.Trip;
 public class TripView {
 
     private TextView txtDriveFrom;
+    private TextView txtDriveFrom2;
     private TextView txtDriveTo;
     private TextView txtTime;
     private TextView txtDuration;
@@ -56,6 +57,8 @@ public class TripView {
         txtTime = (TextView) view.findViewById(R.id.drive_time);
         txtDistance = (TextView) view.findViewById(R.id.drive_distance);
         txtDriveFrom = (TextView) view.findViewById(R.id.drive_from);
+        txtDriveFrom2 = (TextView) view.findViewById(R.id.drive_from2);
+        txtTime = (TextView) view.findViewById(R.id.drive_time);
         txtDriveTo = (TextView) view.findViewById(R.id.drive_to);
         txtDuration = (TextView) view.findViewById(R.id.drive_duration);
         imgDirectionIcon = (ImageView) view.findViewById(R.id.drive_direction_icon);
@@ -69,8 +72,13 @@ public class TripView {
     public void update(Context context, Trip trip, boolean singleView){
 
         mContext = context;
-        //txtDriveFrom.setMaxWidth(getTextWidthInDip(90));
+
+        txtDriveTo.setVisibility(View.VISIBLE);
+        txtDriveFrom.setVisibility(View.VISIBLE);
+        txtDriveFrom2.setVisibility(View.GONE);
+
         txtDriveFrom.setText(getTripStartLocation(trip));
+        txtDriveFrom2.setText(getTripStartLocation(trip));
 
         String strEndPlace = getTripEndLocation(trip);
         if (TextUtils.isEmpty(strEndPlace)){
@@ -94,7 +102,6 @@ public class TripView {
             else {
                 txtSample.setText("SAMPLE TRIP");
             }
-
         }
         else {
             txtSample.setVisibility(View.GONE);
@@ -162,13 +169,14 @@ public class TripView {
         }
 
         if (start.equalsIgnoreCase(end)) {
+
+            // just display one lable
             driveToUnknown.setVisibility(View.GONE);
             txtDriveTo.setVisibility(View.GONE);
-           // txtDriveFrom.setMaxWidth(getTextWidthInDip(170));
+            txtDriveFrom.setVisibility(View.GONE);
+            txtDriveFrom2.setVisibility(View.VISIBLE);
             return "";
         }
-
-        txtDriveTo.setVisibility(View.VISIBLE);
 
         if (end.equals("unknown")) {
             driveToUnknown.setVisibility(View.VISIBLE);
