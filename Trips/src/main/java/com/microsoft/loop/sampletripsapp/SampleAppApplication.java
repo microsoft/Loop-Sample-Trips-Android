@@ -32,6 +32,7 @@ import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import io.fabric.sdk.android.Fabric;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,12 +54,14 @@ import ms.loop.loopsdk.util.LoopError;
 public class SampleAppApplication extends MultiDexApplication implements ILoopSDKCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = SampleAppApplication.class.getSimpleName();
-    private static KnownLocationProcessor knownLocationProcessor ;
+    private static KnownLocationProcessor knownLocationProcessor;
 
     private static boolean sdkInitialized = false;
     private static String DAYS_IN_APP_KEY = "days_in_app_key";
     private static String MIX_PANEL_DATE_FORMAT = "yyyy-MM-dd'T'00:00:00";  // mixpanel dateformat
     private static String MIX_PANEL_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";  // mixpanel dateformat
+
+    private static final String sharedPrefName = "TripsApp";
 
     public static SampleAppApplication instance;
     public static TripProcessor tripProcessor;
@@ -72,7 +75,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         Fabric.with(this, new Crashlytics());
         instance = this;
 
-        if(isLoopEnabled()) {
+        if (isLoopEnabled()) {
             initializeLoopSDK();
         }
 
@@ -90,16 +93,16 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         mixpanel.track("App Launched");
     }
 
-    public void initializeLoopSDK(){
-        // initialize the Loop SDK. create an account to get your appId and appToken
+    public void initializeLoopSDK() {
 
+        // initialize the Loop SDK. create an account to get your appId and appToken
         String appId = BuildConfig.APP_ID; // Or replace your id here
         String appToken = BuildConfig.APP_TOKEN; // or replace your app token here
 
         LoopSDK.initialize(this, appId, appToken);
 
-        String userId = "YOUR USER ID";
-        String deviceId = "YOUR DEVICE ID";
+        String userId = "YOUR USER ID"; // Or replace your user Id
+        String deviceId = "YOUR DEVICE ID"; // Or replace your device Id
 
         //LoopSDK.initialize(this, appId, appToken, userId, deviceId);
     }
@@ -107,133 +110,117 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     @Override
     public void onInitialized() {
 
+        if (sdkInitialized) return;
+
         // start any required Providers
         LoopLocationProvider.start(SignalConfig.SIGNAL_SEND_MODE_BATCH);
 
-        if (!sdkInitialized) {
+        tripProcessor = new TripProcessor();
+        driveProcessor = new DriveProcessor();
+        knownLocationProcessor = new KnownLocationProcessor();
 
-            tripProcessor = new TripProcessor();
-            driveProcessor = new DriveProcessor();
-            knownLocationProcessor = new KnownLocationProcessor();
+        // initialize signal processors
+        tripProcessor.initialize();
+        driveProcessor.initialize();
+        knownLocationProcessor.initialize();
 
-            // initialize signal processors
-            tripProcessor.initialize();
-            driveProcessor.initialize();
-            knownLocationProcessor.initialize();
+        sdkInitialized = true;
 
-            sdkInitialized = true;
+        LoopUtils.initialize();
+        LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
 
-            LoopUtils.initialize();
-
-            // register signal listeners
-            LoopSDK.registerSignalListener("drives", "*", new ISignalListener() {
-                @Override
-                public void onSignal(Signal signal) {}
-            });
-
-            LoopLocationProvider.registerCallback("location", new LoopLocationProvider.ILocationProviderCallback() {
-                @Override
-                public void onLocationChanged(Location location) {}
-                @Override
-                public void onModeChanged(int modeFrom, int modeTo, Location location) {}
-                @Override
-                public void onKnownLocationEntered(KnownLocation location) {}
-                @Override
-                public void onKnownLocationExited(KnownLocation location) {}
-            });
-            LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
-        }
-        // knownLocationProcessor.initialize();
-        Intent i = new Intent("android.intent.action.onInitialized").putExtra("status", "initialized");
-        this.sendBroadcast(i);
+        // send intent to activity to update
+        Intent intent = new Intent("android.intent.action.onInitialized").putExtra("status", "initialized");
+        this.sendBroadcast(intent);
     }
 
     @Override
-    public void onInitializeFailed(LoopError loopError) {}
+    public void onInitializeFailed(LoopError loopError) {
+    }
 
     @Override
-    public void onServiceStatusChanged(String provider, String status, Bundle bundle) {}
+    public void onServiceStatusChanged(String provider, String status, Bundle bundle) {
+    }
 
     @Override
-    public void onDebug(String debugString) {}
+    public void onDebug(String debugString) {
+    }
 
     public static boolean isLocationTurnedOn(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean locationEnbaled = false;
+        boolean locationEnabled = false;
 
         try {
-            locationEnbaled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            if (locationEnbaled) {
-                locationEnbaled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            locationEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (locationEnabled) {
+                locationEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             }
-        } catch (Exception ex) {}
-        return locationEnbaled;
+        } catch (Exception ex) {
+        }
+        return locationEnabled;
     }
 
-    public  void openLocationServiceSettingPage(final Activity activity) {
+    public void openLocationServiceSettingPage(final Activity activity) {
 
-            if (isLocationTurnedOn(activity)) return;
-            try {
-                if (googleApiClient == null) {
-                    googleApiClient = new GoogleApiClient.Builder(activity)
-                            .addApi(LocationServices.API)
-                            .addConnectionCallbacks(this)
-                            .addOnConnectionFailedListener(this).build();
-                    googleApiClient.connect();
-                }
-
-                LocationRequest locationRequest = LocationRequest.create();
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                locationRequest.setInterval(30 * 1000);
-                locationRequest.setFastestInterval(5 * 1000);
-                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                        .addLocationRequest(locationRequest);
-                builder.setAlwaysShow(true);
-
-                PendingResult<LocationSettingsResult> result =
-                        LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-                result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                    @Override
-                    public void onResult(LocationSettingsResult result) {
-                        final Status status = result.getStatus();
-                        final LocationSettingsStates state = result.getLocationSettingsStates();
-                        switch (status.getStatusCode()) {
-                            case LocationSettingsStatusCodes.SUCCESS:
-                                break;
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                try {
-                                    status.startResolutionForResult((Activity) activity, 0x1);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Ignore the error.
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                break;
-                        }
-                    }
-                });
-
+        if (isLocationTurnedOn(activity)) return;
+        try {
+            if (googleApiClient == null) {
+                googleApiClient = new GoogleApiClient.Builder(activity)
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this).build();
+                googleApiClient.connect();
             }
-            catch (Exception e){}
+
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
+            builder.setAlwaysShow(true);
+
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    final LocationSettingsStates state = result.getLocationSettingsStates();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            try {
+                                status.startResolutionForResult((Activity) activity, 0x1);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            break;
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+        }
     }
 
     public static void setSharedPrefValue(Context context, String key, long value) {
-        context.getSharedPreferences("TripsApp",0).edit().putLong(key, value).apply();
-        context.getSharedPreferences("TripsApp",0).edit().commit();
+        context.getSharedPreferences(sharedPrefName, 0).edit().putLong(key, value).apply();
+        context.getSharedPreferences(sharedPrefName, 0).edit().commit();
     }
 
     public static long getLongSharedPrefValue(Context context, String key) {
-        return context.getSharedPreferences("TripsApp",0).getLong(key, 0);
+        return context.getSharedPreferences(sharedPrefName, 0).getLong(key, 0);
     }
 
     public static void setSharedPrefValue(Context context, String key, boolean value) {
-        context.getSharedPreferences("TripsApp",0).edit().putBoolean(key, value).apply();
-        context.getSharedPreferences("TripsApp",0).edit().commit();
+        context.getSharedPreferences(sharedPrefName, 0).edit().putBoolean(key, value).apply();
+        context.getSharedPreferences(sharedPrefName, 0).edit().commit();
     }
 
-    public static boolean getBooleanSharedPrefValue(Context context, String key, boolean defValue)
-    {
-        return context.getSharedPreferences("TripsApp",0).getBoolean(key, defValue);
+    public static boolean getBooleanSharedPrefValue(Context context, String key, boolean defValue) {
+        return context.getSharedPreferences(sharedPrefName, 0).getBoolean(key, defValue);
     }
 
     public static String convertDateFormat(Date localdate, boolean useTime) {
@@ -242,32 +229,36 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         String gmtTime = df.format(localdate);
         return gmtTime;
     }
-    private boolean isLoopEnabled(){
+
+    private boolean isLoopEnabled() {
         return getBooleanSharedPrefValue(this, "helpusimprove", true);
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {}
+    public void onConnected(@Nullable Bundle bundle) {
+    }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
     public static boolean isNetworkAvailable(Context context) {
-        boolean status=false;
-        try{
+        boolean status = false;
+        try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getNetworkInfo(0);
-            if (netInfo != null && netInfo.getState()==NetworkInfo.State.CONNECTED) {
-                status= true;
-            }else {
+            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
+                status = true;
+            } else {
                 netInfo = cm.getNetworkInfo(1);
-                if(netInfo!=null && netInfo.getState()==NetworkInfo.State.CONNECTED)
-                    status= true;
+                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED)
+                    status = true;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity
                     if (!isLocationOn) {
                         SampleAppApplication.instance.openLocationServiceSettingPage(MainActivity.this);
                     }
-                       LoopUtils.startLocationProvider();
+                    LoopUtils.startLocationProvider();
                 } else {
-                       LoopUtils.stopLocationProvider();
+                    LoopUtils.stopLocationProvider();
                 }
                 SampleAppApplication.setSharedPrefValue(getApplicationContext(), "AppTracking", isChecked);
             }
@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void loadDrivesAndTrips() {
-
         checkTrackingEnabled();
         if (LoopUtils.getDrives().size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
             updateDrivesInUI();
@@ -275,8 +274,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
         });
-
-
     }
 
     @Override

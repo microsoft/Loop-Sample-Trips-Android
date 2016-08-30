@@ -31,7 +31,7 @@ public class LoopUtils {
     private static Locations knownLocations;
     private static Trips localTrips;
 
-    public static void initialize(){
+    public static void initialize() {
         if (!LoopSDK.isInitialized()) return;
         localDrives = Drives.createAndLoad(Drives.class, Drive.class);
         knownLocations = Locations.createAndLoad(Locations.class, KnownLocation.class);
@@ -69,27 +69,25 @@ public class LoopUtils {
 
     }
 
-    public static List<Drive> getDrives(){
+    public static List<Drive> getDrives() {
         if (LoopSDK.isInitialized()) {
             return localDrives.sortedByStartedAt();
-        }
-        else{
+        } else {
             return new ArrayList<>();
         }
     }
 
-    public static List<Trip> getTrips(){
+    public static List<Trip> getTrips() {
         if (LoopSDK.isInitialized()) {
             return localTrips.sortedByStartedAt();
-        }
-        else{
+        } else {
             return new ArrayList<>();
         }
     }
 
-    public static void downloadTrips(final IProfileDownloadCallback callback){
+    public static void downloadTrips(final IProfileDownloadCallback callback) {
 
-        if (!LoopSDK.isInitialized()){
+        if (!LoopSDK.isInitialized()) {
             callback.onProfileDownloadFailed(new LoopError("Loop not initialized"));
             return;
         }
@@ -105,15 +103,15 @@ public class LoopUtils {
 
             @Override
             public void onProfileDownloadFailed(LoopError error) {
-                if (localTrips.size() == 0){
+                if (localTrips.size() == 0) {
                     loadSampleTrips();
                 }
             }
         });
     }
 
-    public static void downloadDrives(final IProfileDownloadCallback callback){
-        if (!LoopSDK.isInitialized()){
+    public static void downloadDrives(final IProfileDownloadCallback callback) {
+        if (!LoopSDK.isInitialized()) {
             callback.onProfileDownloadFailed(new LoopError("Loop not initialized"));
             return;
         }
@@ -129,16 +127,16 @@ public class LoopUtils {
 
             @Override
             public void onProfileDownloadFailed(LoopError error) {
-                if (localDrives.size() == 0){
+                if (localDrives.size() == 0) {
                     loadSampleDrives();
                 }
             }
         });
     }
 
-    public static void loadItems(){
-        if (LoopSDK.isInitialized()){
-           localDrives.load();
+    public static void loadItems() {
+        if (LoopSDK.isInitialized()) {
+            localDrives.load();
             localTrips.load();
         }
     }
@@ -170,7 +168,7 @@ public class LoopUtils {
     }
 
     public static KnownLocation getLocation(String id) {
-        if (LoopSDK.isInitialized()){
+        if (LoopSDK.isInitialized()) {
             KnownLocation knownLocation = knownLocations.byEntityId(id);
             return knownLocation;
         }
@@ -182,6 +180,7 @@ public class LoopUtils {
             LoopLocationProvider.start(SignalConfig.SIGNAL_SEND_MODE_BATCH);
         }
     }
+
     public static void stopLocationProvider() {
         if (LoopSDK.isInitialized()) {
             LoopLocationProvider.stop();
