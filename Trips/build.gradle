@@ -34,6 +34,10 @@ android {
         buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
         buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + MIXPANEL_TOKEN + '\"'
         manifestPlaceholders = [ mapsApiKey:mapsApiKey, fabricKey:fabricKey]
+
+        buildConfigField "String", "ACRA_URL", "\"https://nextbeta.cloudant.com/acra-nextlockscreen/_design/acra-storage/_update/report\""
+        buildConfigField "String", "ACRA_PWD", "\"e7d3382c616ab33a8e37ebf5bd77e3d6c713c1ad\""
+        buildConfigField "String", "ACRA_LOGIN", "\"lyinkindoungrongsterente\""
     }
     dexOptions {
         dexInProcess = false

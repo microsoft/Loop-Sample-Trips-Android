@@ -34,6 +34,7 @@ import java.util.List;
 import ms.loop.loopsdk.core.ILoopServiceCallback;
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
+import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
 import ms.loop.loopsdk.profile.KnownLocation;
 import ms.loop.loopsdk.profile.Label;
 import ms.loop.loopsdk.profile.Labels;
@@ -279,6 +280,23 @@ public class MainActivity extends AppCompatActivity
             }
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
+        });
+
+        LoopUtils.registerItemChangedCallback(new IProfileItemChangedCallback() {
+            @Override
+            public void onItemChanged(String entityId) {
+                updateTripsInUI();
+            }
+
+            @Override
+            public void onItemAdded(String entityId) {
+
+            }
+
+            @Override
+            public void onItemRemoved(String entityId) {
+
+            }
         });
     }
 

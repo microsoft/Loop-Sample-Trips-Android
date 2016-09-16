@@ -244,14 +244,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_drive_duration"
+                        android:paddingRight="5dp"
                         android:layout_gravity="center_vertical"/>
 
                     <com.microsoft.loop.sampletripsapp.utils.CustomTextView
-                        android:id="@+id/drive_duration"
+                        android:id="@+id/drive_duration_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="To"
-                        android:paddingLeft="3dp"
+                        customTextView:fontName="DroidSansMono"
+                        android:paddingRight="4dp"
+                        android:textColor="#1E1E1E"
+                        android:textSize="10sp" />
+
+                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                        android:id="@+id/drive_duration_min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="To"
+                        android:paddingRight="4dp"
+                        customTextView:fontName="DroidSansMono"
+                        android:textColor="#1E1E1E"
+                        android:textSize="10sp" />
+
+                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                        android:id="@+id/drive_duration_sec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="To"
                         customTextView:fontName="DroidSansMono"
                         android:textColor="#1E1E1E"
                         android:textSize="10sp" />

@@ -34,7 +34,9 @@ public class TripView {
     private TextView txtDriveFrom2;
     private TextView txtDriveTo;
     private TextView txtTime;
-    private TextView txtDuration;
+    private TextView txtDurationHours;
+    private TextView txtDurationMinutes;
+    private TextView txtDurationSecs;
     private TextView txtDistance;
     private TextView txtSample;
 
@@ -60,7 +62,9 @@ public class TripView {
         txtDriveFrom2 = (TextView) view.findViewById(R.id.drive_from2);
         txtTime = (TextView) view.findViewById(R.id.drive_time);
         txtDriveTo = (TextView) view.findViewById(R.id.drive_to);
-        txtDuration = (TextView) view.findViewById(R.id.drive_duration);
+        txtDurationHours = (TextView) view.findViewById(R.id.drive_duration_hour);
+        txtDurationMinutes = (TextView) view.findViewById(R.id.drive_duration_min);
+        txtDurationSecs = (TextView) view.findViewById(R.id.drive_duration_sec);
         imgDirectionIcon = (ImageView) view.findViewById(R.id.drive_direction_icon);
         imgDirectionIcon2 = (ImageView) view.findViewById(R.id.drive_direction_icon2);
         driveFromUnknown = (ImageView) view.findViewById(R.id.drive_from_location_unknwon);
@@ -92,7 +96,7 @@ public class TripView {
         txtDriveTo.setText(getTripEndLocation(trip));
         txtDistance.setText(getTripDistance(trip));
         txtTime.setText(getTripTimeInfo(trip));
-        txtDuration.setText(getTripDuration(trip));
+       fillTripDuration(trip);
 
         if (trip.entityId.startsWith("test") &&!singleView) {
             txtSample.setVisibility(View.VISIBLE);
@@ -204,7 +208,7 @@ public class TripView {
         return String.format(Locale.US, "%s - %s", start, end, dur);
     }
 
-    private String getTripDuration(Trip trip)
+    private void fillTripDuration(Trip trip)
     {
         long diffInSeconds = (trip.endedAt.getTime() - trip.startedAt.getTime()) / 1000;
 
@@ -213,11 +217,24 @@ public class TripView {
         diff[1] = (diffInSeconds = (diffInSeconds / 60)) >= 60 ? diffInSeconds % 60 : diffInSeconds;
         diff[0] = (diffInSeconds = (diffInSeconds / 60)) >= 24 ? diffInSeconds % 24 : diffInSeconds;
 
-        return String.format(Locale.US,
-            "%s%s%s",
-            diff[0] <= 0 ? "" : diff[0] + "h ",
-            diff[1] <= 0 ? "":  diff[1] + "m ",
-            diff[2] <= 0 ? "":  diff[2] + "s");
+        txtDurationHours.setVisibility(View.GONE);
+        txtDurationMinutes.setVisibility(View.GONE);
+        txtDurationSecs.setVisibility(View.GONE);
+
+        if (diff[0] > 0){
+            txtDurationHours.setText(String.format(Locale.US, "%sh", diff[0]));
+            txtDurationHours.setVisibility(View.VISIBLE);
+        }
+
+        if (diff[1] > 0){
+            txtDurationMinutes.setText(String.format(Locale.US, "%sm", diff[1]));
+            txtDurationMinutes.setVisibility(View.VISIBLE);
+        }
+
+        if (diff[2] > 0){
+            txtDurationSecs.setText(String.format(Locale.US, "%ss", diff[2]));
+            txtDurationSecs.setVisibility(View.VISIBLE);
+        }
     }
 
     private int getTextWidthInDip(int width){

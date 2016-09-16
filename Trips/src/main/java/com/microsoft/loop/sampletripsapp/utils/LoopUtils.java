@@ -50,6 +50,26 @@ public class LoopUtils {
 
     }
 
+    public static void registerItemChangedCallback(final IProfileItemChangedCallback callback){
+
+        localTrips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback() {
+            @Override
+            public void onItemChanged(String entityId) {
+                callback.onItemChanged(entityId);
+            }
+
+            @Override
+            public void onItemAdded(String entityId) {
+                SampleAppApplication.mixpanel.track("Trip created");
+            }
+
+            @Override
+            public void onItemRemoved(String entityId) {}
+        });
+    }
+
+
+
     public static List<Trip> getTrips() {
         if (LoopSDK.isInitialized()) {
             return localTrips.sortedByStartedAt();
