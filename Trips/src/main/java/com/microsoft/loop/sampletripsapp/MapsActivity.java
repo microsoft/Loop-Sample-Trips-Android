@@ -1,62 +1,50 @@
 package com.microsoft.loop.sampletripsapp;
 
-import android.content.ClipboardManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
 import com.microsoft.loop.sampletripsapp.utils.TripView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
-import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.Drive;
 import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.GeospatialPoint;
-import ms.loop.loopsdk.profile.Path;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
 
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private String entityId;
-    private Trips trips;
-    private Drives drives;
     Trip trip;
     TripView tripView;
     private View backAction;
     private ImageView deleteDriveAction;
 
+    private MapsInfoWindowAdapter mapsInfoWindowAdapter;
+
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.US);
+    private Marker selectedMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +56,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         entityId = this.getIntent().getExtras().getString("tripid");
-        trips = Trips.createAndLoad(Trips.class, Trip.class);
-        drives = Drives.createAndLoad(Drives.class, Drive.class);
 
         final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
                 .findViewById(android.R.id.content)).getChildAt(0);
@@ -98,47 +84,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-    /*    viewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
-                // Adjust start time by 30 minutes
-                Calendar startTime = Calendar.getInstance();
-                startTime.setTime(trip.startedAt);
-                startTime.add(Calendar.MINUTE, -30);
-
-                Calendar endTime = Calendar.getInstance();
-                endTime.setTime(trip.endedAt);
-                endTime.add(Calendar.MINUTE, 30);
-
-                String startedAtDate = dateFormat.format(startTime.getTime());
-                String startedAtHour = hourFormat.format(startTime.getTime());
-                String endedAtDate = dateFormat.format(endTime.getTime());
-                String endedAtHour = hourFormat.format(endTime.getTime());
-                String queryDate = LoopSDK.userId + " AND location AND createdAt:[\"" + startedAtDate + "T" + startedAtHour + "-07:00\" TO \"" + endedAtDate + "T" + endedAtHour + "-07:00\"]";
-                clipboard.setText(queryDate);
-                Toast.makeText(MapsActivity.this, "Elastic search query copied", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+        mapsInfoWindowAdapter = new MapsInfoWindowAdapter();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         trip = null;
-        trip = trips.byEntityId(entityId);
-        if (trip == null) {
-            trip = drives.byEntityId(entityId);
-            if (trip == null) return;
-        }
+        trip = LoopUtils.getTrip(entityId);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setRotateGesturesEnabled(false);
+        mMap.setInfoWindowAdapter(mapsInfoWindowAdapter);
+        mMap.setOnMarkerClickListener(this);
         drawPath();
     }
 
@@ -161,6 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Marker marker = mMap.addMarker(startMarker);
         marker.showInfoWindow();
+        selectedMarker = marker;
         LatLng latLng = new LatLng(firstPoint.latDegrees, firstPoint.longDegrees);
         for (GeospatialPoint point: trip.path.points)
         {
@@ -183,7 +145,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.addMarker(endMarker).showInfoWindow();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+    }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        selectedMarker = marker;
+        return false;
+    }
+
+    class MapsInfoWindowAdapter implements InfoWindowAdapter{
+
+        private final View myContentsView;
+        MapsInfoWindowAdapter(){
+            myContentsView = getLayoutInflater().inflate(R.layout.maps_info_window, null);
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            TextView tvTitle = ((TextView)myContentsView.findViewById(R.id.txtinfowindowlocationname));
+            tvTitle.setText(marker.getTitle().toUpperCase());
+            return myContentsView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
     }
 }

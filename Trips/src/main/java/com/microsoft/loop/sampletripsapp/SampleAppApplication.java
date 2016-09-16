@@ -95,8 +95,8 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void initializeLoopSDK() {
 
         // initialize the Loop SDK. create an account to get your appId and appToken
-        String appId = "YOUR_APP_ID";
-        String appToken = "YOUR_APP_TOKEN";
+        String appId = BuildConfig.APP_ID;
+        String appToken = BuildConfig.APP_TOKEN;
 
         LoopSDK.initialize(this, appId, appToken);
 
@@ -104,6 +104,11 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         String deviceId = "TEST_USER_DEVICE_ID";
 
         //LoopSDK.initialize(this, appId, appToken, userId, deviceId);
+    }
+
+    public void unInitializeLoopSDK() {
+        sdkInitialized = false;
+        LoopSDK.unInitialize();
     }
 
     @Override

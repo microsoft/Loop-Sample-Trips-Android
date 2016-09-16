@@ -27,35 +27,17 @@ import ms.loop.loopsdk.util.LoopError;
 
 public class LoopUtils {
 
-    private static Drives localDrives;
     private static Locations knownLocations;
     private static Trips localTrips;
 
     public static void initialize() {
         if (!LoopSDK.isInitialized()) return;
-        localDrives = Drives.createAndLoad(Drives.class, Drive.class);
         knownLocations = Locations.createAndLoad(Locations.class, KnownLocation.class);
         localTrips = Trips.createAndLoad(Trips.class, Trip.class);
 
-        localDrives.registerItemChangedCallback("Drives", new IProfileItemChangedCallback() {
-            @Override
-            public void onItemChanged(String entityId) {
-            }
-
-            @Override
-            public void onItemAdded(String entityId) {
-                SampleAppApplication.mixpanel.track("Drive created");
-            }
-
-            @Override
-            public void onItemRemoved(String entityId) {
-            }
-        });
-
         localTrips.registerItemChangedCallback("Trips", new IProfileItemChangedCallback() {
             @Override
-            public void onItemChanged(String entityId) {
-            }
+            public void onItemChanged(String entityId) {}
 
             @Override
             public void onItemAdded(String entityId) {
@@ -63,18 +45,9 @@ public class LoopUtils {
             }
 
             @Override
-            public void onItemRemoved(String entityId) {
-            }
+            public void onItemRemoved(String entityId) {}
         });
 
-    }
-
-    public static List<Drive> getDrives() {
-        if (LoopSDK.isInitialized()) {
-            return localDrives.sortedByStartedAt();
-        } else {
-            return new ArrayList<>();
-        }
     }
 
     public static List<Trip> getTrips() {
@@ -110,47 +83,16 @@ public class LoopUtils {
         });
     }
 
-    public static void downloadDrives(final IProfileDownloadCallback callback) {
-        if (!LoopSDK.isInitialized()) {
-            callback.onProfileDownloadFailed(new LoopError("Loop not initialized"));
-            return;
-        }
-        localDrives.download(true, new IProfileDownloadCallback() {
-            @Override
-            public void onProfileDownloadComplete(int itemCount) {
-
-                if (itemCount == 0) {
-                    loadSampleDrives();
-                }
-                callback.onProfileDownloadComplete(itemCount);
-            }
-
-            @Override
-            public void onProfileDownloadFailed(LoopError error) {
-                if (localDrives.size() == 0) {
-                    loadSampleDrives();
-                }
-            }
-        });
-    }
 
     public static void loadItems() {
         if (LoopSDK.isInitialized()) {
-            localDrives.load();
             localTrips.load();
         }
     }
 
-    public static void loadSampleDrives() {
-        try {
-            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_drives.json"));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                localDrives.createAndAddItem(jsonObject);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public static void deleteItems() {
+        if (LoopSDK.isInitialized()) {
+            localTrips.deleteAll();
         }
     }
 
@@ -171,6 +113,14 @@ public class LoopUtils {
         if (LoopSDK.isInitialized()) {
             KnownLocation knownLocation = knownLocations.byEntityId(id);
             return knownLocation;
+        }
+        return null;
+    }
+
+    public static Trip getTrip(String id) {
+        if (LoopSDK.isInitialized()) {
+            Trip trip = localTrips.byEntityId(id);
+            return trip;
         }
         return null;
     }

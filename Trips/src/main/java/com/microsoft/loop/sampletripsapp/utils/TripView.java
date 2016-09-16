@@ -110,23 +110,6 @@ public class TripView {
         toKnownLocation.setVisibility(View.GONE);
         fromKnownLocation.setVisibility(View.GONE);
 
-        if (MainActivity.isKnownLocation(trip.startLocation, "work")){
-
-            String uri = "@drawable/ic_work";
-            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
-            Drawable res = context.getResources().getDrawable(imageResource);
-            fromKnownLocation.setImageDrawable(res);
-            fromKnownLocation.setVisibility(View.VISIBLE);
-        }
-        if (MainActivity.isKnownLocation(trip.startLocation, "home")){
-
-            String uri = "@drawable/ic_home";
-            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
-            Drawable res = context.getResources().getDrawable(imageResource);
-            fromKnownLocation.setImageDrawable(res);
-            fromKnownLocation.setVisibility(View.VISIBLE);
-
-        }
         if ((imgDirectionIcon2.getVisibility() == View.GONE) && MainActivity.isKnownLocation(trip.endLocation, "work")){
 
             String uri = "@drawable/ic_work";
@@ -144,6 +127,24 @@ public class TripView {
             toKnownLocation.setVisibility(View.VISIBLE);
         }
 
+        if (MainActivity.isKnownLocation(trip.startLocation, "work")){
+
+            String uri = "@drawable/ic_work";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            fromKnownLocation.setImageDrawable(res);
+            fromKnownLocation.setVisibility(View.VISIBLE);
+            imgDirectionIcon2.setVisibility(View.GONE);
+        }
+        if (MainActivity.isKnownLocation(trip.startLocation, "home")){
+
+            String uri = "@drawable/ic_home";
+            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Drawable res = context.getResources().getDrawable(imageResource);
+            fromKnownLocation.setImageDrawable(res);
+            fromKnownLocation.setVisibility(View.VISIBLE);
+            imgDirectionIcon2.setVisibility(View.GONE);
+        }
     }
 
     private String getTripStartLocation(Trip trip) {
@@ -213,13 +214,10 @@ public class TripView {
         diff[0] = (diffInSeconds = (diffInSeconds / 60)) >= 24 ? diffInSeconds % 24 : diffInSeconds;
 
         return String.format(Locale.US,
-                "%s%d:%s%d:%s%d",
-                diff[0] <= 9 ? "0" : "",
-                diff[0],
-                diff[1] <= 9 ? "0": "",
-                diff[1],
-                diff[2] <= 9 ? "0":"",
-                diff[2]);
+            "%s%s%s",
+            diff[0] <= 0 ? "" : diff[0] + "h ",
+            diff[1] <= 0 ? "":  diff[1] + "m ",
+            diff[2] <= 0 ? "":  diff[2] + "s");
     }
 
     private int getTextWidthInDip(int width){

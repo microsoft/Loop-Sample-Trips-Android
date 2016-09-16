@@ -12,5 +12,5 @@
     <color name="drawerIcon">#26ABCD</color>
     <color name="mappath">#4D000000</color>
     <color name="mappathcircle">#33000000</color>
-
+    <color name="trackingoffcolor">#CD4E26</color>
 </resources>

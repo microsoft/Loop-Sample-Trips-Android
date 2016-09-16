@@ -2,13 +2,13 @@ package com.microsoft.loop.sampletripsapp;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,29 +28,16 @@ import android.widget.TextView;
 import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
 import com.microsoft.loop.sampletripsapp.utils.ViewUtils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import ms.loop.loopsdk.core.ILoopServiceCallback;
 import ms.loop.loopsdk.core.LoopSDK;
-import ms.loop.loopsdk.profile.Drive;
-import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
-import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
 import ms.loop.loopsdk.profile.KnownLocation;
 import ms.loop.loopsdk.profile.Label;
 import ms.loop.loopsdk.profile.Labels;
-import ms.loop.loopsdk.profile.Locations;
 import ms.loop.loopsdk.profile.Trip;
-import ms.loop.loopsdk.profile.Trips;
-import ms.loop.loopsdk.providers.LoopLocationProvider;
-import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
 
 public class MainActivity extends AppCompatActivity
@@ -101,30 +88,19 @@ public class MainActivity extends AppCompatActivity
                 int id = item.getItemId();
                 item.setChecked(true);
                 switch (id) {
-                    case R.id.nav_drives: {
-                        item.setIcon(getResources().getDrawable(R.drawable.ic_drives_on));
-                        navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
-                        navigationView.getMenu().getItem(1).setChecked(false);
-                        updateDrivesInUI();
-                        break;
-                    }
-
                     case R.id.nav_trips: {
                         item.setIcon(getResources().getDrawable(R.drawable.ic_trips_on));
-                        navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
-                        navigationView.getMenu().getItem(0).setChecked(false);
-                        updateDrivesInUI();
+                        updateTripsInUI();
                         break;
                     }
-
-                    case R.id.nav_version:
-                    case R.id.helpusimprove: {
-                        navigationView.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_drives_off));
-                        navigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_trips_off));
+                    case R.id.nav_version: {
                         item.setChecked(false);
-                        if (id == R.id.nav_version) {
-                            openUrlInBrowser(Loop_URL);
-                        }
+                        openUrlInBrowser(Loop_URL);
+                        return false;
+                    }
+                    case R.id.helpusimprove: {
+                        item.setChecked(false);
+                        deleteMyData();
                         return false;
                     }
                 }
@@ -170,6 +146,7 @@ public class MainActivity extends AppCompatActivity
                     LoopUtils.stopLocationProvider();
                 }
                 SampleAppApplication.setSharedPrefValue(getApplicationContext(), "AppTracking", isChecked);
+                checkTrackingEnabled();
             }
         });
         locationText = (TextView) this.findViewById(R.id.txtlocationtracking);
@@ -194,7 +171,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final SwitchCompat helpusImproveSwitch = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
+       /* final SwitchCompat helpusImproveSwitch = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
         helpusImproveSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -226,19 +203,57 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
+*/
 
     }
 
     public void initLoopProfileItems() {
-        List<Trip> drives = new ArrayList<Trip>(LoopUtils.getDrives());
+        List<Trip> trips = new ArrayList<Trip>(LoopUtils.getTrips());
         adapter = new TripsViewAdapter(this,
-                R.layout.tripview, drives);
+                R.layout.tripview, trips);
 
         tripListView = (ListView) findViewById(R.id.tripslist);
         tripListView.setAdapter(adapter);
     }
 
+    public void deleteMyData() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete all trips?")
+                .setCancelable(true)
+                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        LoopSDK.deleteUser(new ILoopServiceCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void value) {
+                                LoopUtils.deleteItems();
+                                SampleAppApplication.instance.unInitializeLoopSDK();
+                                SampleAppApplication.instance.initializeLoopSDK();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                        drawer.closeDrawer(GravityCompat.START);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(LoopError error) {
+                            }
+                        });
+                    }
+                });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {}
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @Override
     public void onBackPressed() {
@@ -252,24 +267,15 @@ public class MainActivity extends AppCompatActivity
 
     public void loadDrivesAndTrips() {
         checkTrackingEnabled();
-        if (LoopUtils.getDrives().size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
-            updateDrivesInUI();
+        if (LoopUtils.getTrips().size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
+            updateTripsInUI();
             return;
         }
-
-        LoopUtils.downloadDrives(new IProfileDownloadCallback() {
-            @Override
-            public void onProfileDownloadComplete(int itemCount) {
-                updateDrivesInUI();
-            }
-            @Override
-            public void onProfileDownloadFailed(LoopError error) {}
-        });
 
         LoopUtils.downloadTrips(new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
-                updateDrivesInUI();
+                updateTripsInUI();
             }
             @Override
             public void onProfileDownloadFailed(LoopError error) {}
@@ -293,8 +299,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_drives) {
-        } else if (id == R.id.nav_trips) {
+       /* if (id == R.id.nav_drives) {
+        } else*/ if (id == R.id.nav_trips) {
         } else if (id == R.id.nav_version || id == R.id.helpusimprove) {
             return false;
         }
@@ -310,21 +316,14 @@ public class MainActivity extends AppCompatActivity
         String mode = tracking ? "ON" : "OFF";
         String type = checkSelectedItemType();
         locationText.setText(String.format("%s RECORDING %s", type, mode));
+        locationText.setTextColor(tracking ? Color.BLACK : getResources().getColor(R.color.trackingoffcolor));
         locationSwitch.setChecked(tracking);
 
-        boolean helpusimprove = SampleAppApplication.getBooleanSharedPrefValue(getApplicationContext(), "helpusimprove", true);
-
-        final SwitchCompat helpusImproveSwitch = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
-        helpusImproveSwitch.setChecked(helpusimprove);
-
-        if (type.equalsIgnoreCase("trips")) {
             txtDescription.setVisibility(View.VISIBLE);
-        } else {
-            txtDescription.setVisibility(View.GONE);
-        }
+
     }
 
-    public void updateDrivesInUI() {
+    public void updateTripsInUI() {
        LoopUtils.loadItems();
         final TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
         String title = "";
@@ -332,12 +331,7 @@ public class MainActivity extends AppCompatActivity
         Menu m = navigationView.getMenu();
         for (int i = 0; i < m.size(); i++) {
             MenuItem mi = m.getItem(i);
-            if (mi.isChecked() && mi.getItemId() == R.id.nav_drives) {
-                drives = new ArrayList<Trip>(LoopUtils.getDrives());
-                title = "DRIVES";
-                break;
-
-            } else if (mi.isChecked() && (mi.getItemId() == R.id.nav_trips || mi.getItemId() == R.id.nav_version)) {
+          if (mi.isChecked() && (mi.getItemId() == R.id.nav_trips || mi.getItemId() == R.id.nav_version)) {
                 drives = new ArrayList<Trip>(LoopUtils.getTrips());
                 title = "TRIPS";
                 break;

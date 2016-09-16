@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
+    android:orientation="vertical">
+
+    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        android:id="@+id/customdialogcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:padding="23dp"
+        android:textColor="#000"
+        android:text="App data will be deleted permanently including trips and settings."
+        customTextView:fontName="Roboto-Regular"/>
+</LinearLayout>

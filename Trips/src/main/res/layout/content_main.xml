@@ -57,6 +57,7 @@
                 android:id="@+id/title_description" />
 
         </RelativeLayout>
+
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
@@ -87,4 +88,5 @@
             android:paddingRight="3dp"
             android:scrollbars="none" />
     </RelativeLayout>
+
 </RelativeLayout>

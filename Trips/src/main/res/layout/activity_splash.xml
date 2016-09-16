@@ -22,16 +22,6 @@
         android:scaleType="center"
             android:layout_weight="0.9"/>
 
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="DEVELOPER SAMPLE TRIPS APP"
-            android:textAlignment="center"
-            android:gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:textSize="12sp"
-            android:layout_weight="0.1"
-            customTextView:fontName="DroidSansMono"/>
-
         </LinearLayout>
 
 
