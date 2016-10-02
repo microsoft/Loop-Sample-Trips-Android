@@ -131,7 +131,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         sdkInitialized = true;
 
         LoopUtils.initialize();
-        LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
+        //LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
 
         // send intent to activity to update
         Intent intent = new Intent("android.intent.action.onInitialized").putExtra("status", "initialized");

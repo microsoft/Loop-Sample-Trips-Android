@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trips</string>
+    <string name="app_name">Trips Tracker</string>
     <string name="trips">TRIPS</string>
     <string name="drives">DRIVES</string>
     <string name="title_activity_maps">Map</string>
@@ -14,9 +14,9 @@
     <string name="delete_drive">Delete Drive</string>
     <string name="back_to_main">Back to main view</string>
     <string name="title_activity_maps2">Map</string>
-    <string name="about">ABOUT</string>
+    <string name="about">LEARN MORE</string>
     <string name="title_activity_maps1">Map</string>
-    <string name="helpusimprove">DELETE MY DATA</string>
+    <string name="helpusimprove">DELETE ALL TRIPS</string>
     <string name="title_activity_maps3">Map</string>
 
 </resources>

@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:paddingLeft="3dp"
-                android:text="DRIVE RECORDING ON"
+                android:text="TRIPS RECORDING ON"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -49,7 +49,7 @@
             <com.microsoft.loop.sampletripsapp.utils.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(includes all drives, walking and running)"
+                android:text="Start moving and LOOP will auto-track your trips"
                 android:textSize="12sp"
                 customTextView:fontName="DroidSansMono"
                 android:layout_below="@+id/locationswitch"

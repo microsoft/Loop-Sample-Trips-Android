@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete all trips?")
                 .setCancelable(true)
+                .setMessage("This will delete all your trips permanently.")
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity
         boolean tracking = SampleAppApplication.getBooleanSharedPrefValue(this.getApplicationContext(), "AppTracking", true);
         String mode = tracking ? "ON" : "OFF";
         String type = checkSelectedItemType();
-        locationText.setText(String.format("%s RECORDING %s", type, mode));
+        //locationText.setText(String.format("%s RECORDING %s", type, mode));
         locationText.setTextColor(tracking ? Color.BLACK : getResources().getColor(R.color.trackingoffcolor));
         locationSwitch.setChecked(tracking);
 
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity
 
         runOnUiThread(new Runnable() {
             public void run() {
-                titleTextView.setText(finalTitle);
+                //titleTextView.setText(finalTitle);
                 adapter.update(finalDrives);
                 checkTrackingEnabled();
             }

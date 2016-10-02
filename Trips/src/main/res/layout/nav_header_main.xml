@@ -7,13 +7,24 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="44dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@drawable/ic_nav_header_logo"
+        android:src="@drawable/ic_nav_header_logo1"
         android:contentDescription="@string/drives"/>
+
+    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRIP TRACKER"
+        android:layout_gravity="top"
+        android:textSize="27sp"
+        customTextView:fontName="DroidSansMono"
+        android:paddingLeft="9dp"
+        android:id="@+id/toolbar_title1" />
 
 </LinearLayout>

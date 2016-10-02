@@ -112,7 +112,7 @@ public class LoopUtils {
 
     public static void deleteItems() {
         if (LoopSDK.isInitialized()) {
-            localTrips.deleteAll();
+            //localTrips.deleteAll();
         }
     }
 

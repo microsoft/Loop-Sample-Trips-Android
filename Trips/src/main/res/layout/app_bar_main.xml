@@ -25,7 +25,7 @@
         <com.microsoft.loop.sampletripsapp.utils.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/drives"
+            android:text="TRIP TRACKER"
             android:layout_gravity="top"
             android:textSize="27sp"
             customTextView:fontName="DroidSansMono"
