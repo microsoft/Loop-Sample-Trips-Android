@@ -2,12 +2,6 @@
 	"entityId": "testtripid1",
 	"annotations": {},
 	"distanceTraveledInKilometers": 4.661534746022072,
-	"endLocale": {
-		"country": "United States",
-		"county": "King",
-		"locality": "Seattle",
-		"region": "Washington"
-	},
 	"endedAt": "2016-07-24T17:13:46.362-07:00",
 	"path": [{
 		"accuracyMeters": 15,
@@ -55,12 +49,6 @@
 	"entityId": "testtripid2",
 	"annotations": {},
 	"distanceTraveledInKilometers": 7.979471371620546,
-	"endLocale": {
-		"country": "United States",
-		"county": "King",
-		"locality": "Seattle",
-		"region": "Washington"
-	},
 	"endedAt": "2016-07-24T15:39:34.427-07:00",
 	"path": [{
 		"accuracyMeters": 15,
@@ -119,12 +107,6 @@
 		"transportMode": "driving"
 	}],
 	"score": 0,
-	"startLocale": {
-		"country": "United States",
-		"county": "King",
-		"locality": "Seattle",
-		"region": "Washington"
-	},
 	"startedAt": "2016-07-24T15:20:59.417-07:00",
 	"transportMode": "driving",
 	"_portalTestUser": true,

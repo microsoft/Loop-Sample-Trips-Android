@@ -82,7 +82,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile('ms.loop:loopsdk:2.0.1-develop') { changing = true }
+    compile('ms.loop:loopsdk:2.0.2') { changing = true }
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }

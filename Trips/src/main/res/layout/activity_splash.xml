@@ -8,21 +8,34 @@
     android:background="@color/splash_background"
     tools:ignore="all">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:weightSum="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
         <ImageView android:id="@+id/splashscreen" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/trips_splash"
+        android:src="@drawable/ic_launcher"
         android:gravity="center"
         android:scaleType="center"
             android:layout_weight="0.9"/>
 
-        </LinearLayout>
+        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TRIP TRACKER"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="21sp"
+            customTextView:fontName="DroidSansMono"
+            android:id="@+id/toolbar_title2"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/splashscreen"/>
+
+        </RelativeLayout>
 
 
 </LinearLayout>
