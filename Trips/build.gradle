@@ -13,8 +13,7 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-def mapsApiKey = TRIPS_APP_MAPS_KEY_PROP?: "";
-def fabricKey = FABRIC_KEY_PROP?: "";
+def mapsApiKey = TRIPTRACKER_APP_MAPS_KEY_PROP?: "";
 
 
 android {
@@ -22,22 +21,22 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.microsoft.loop.sampletripsapp"
+        applicationId "com.microsoft.loop.triptracker"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1004
+        versionCode 1005
         versionName "1.0.0"
         multiDexEnabled true
 
-        buildConfigField 'String', 'APP_ID', '\"' + TRIPS_APP_ID_PROP + '\"'
-        buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPS_APP_TOKEN_PROP + '\"'
+        buildConfigField 'String', 'APP_ID', '\"' + TRIPTRACKER_APP_ID_PROP + '\"'
+        buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPTRACKER_APP_TOKEN_PROP + '\"'
         buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
-        buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + MIXPANEL_TOKEN + '\"'
-        manifestPlaceholders = [ mapsApiKey:mapsApiKey, fabricKey:fabricKey]
+        buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + TRIPTRACKER_MIXPANEL_TOKEN + '\"'
+        manifestPlaceholders = [ mapsApiKey:mapsApiKey]
 
-        buildConfigField "String", "ACRA_URL", "\"https://nextbeta.cloudant.com/acra-nextlockscreen/_design/acra-storage/_update/report\""
-        buildConfigField "String", "ACRA_PWD", "\"e7d3382c616ab33a8e37ebf5bd77e3d6c713c1ad\""
-        buildConfigField "String", "ACRA_LOGIN", "\"lyinkindoungrongsterente\""
+        buildConfigField "String", "ACRA_URL", '\"' + ACRA_URL_PROP + '\"'
+        buildConfigField "String", "ACRA_PWD", '\"' + ACRA_PWD_PROP + '\"'
+        buildConfigField "String", "ACRA_LOGIN", '\"' + ACRA_LOGIN_PROP + '\"'
     }
     dexOptions {
         dexInProcess = false
@@ -96,4 +95,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:9.4.0'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
     compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'ch.acra:acra:4.6.2'
 }

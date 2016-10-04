@@ -1,12 +1,10 @@
-package com.microsoft.loop.sampletripsapp.utils;
+package com.microsoft.loop.triptracker.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
-import java.io.File;
 
 public class CustomTextView extends TextView {
 

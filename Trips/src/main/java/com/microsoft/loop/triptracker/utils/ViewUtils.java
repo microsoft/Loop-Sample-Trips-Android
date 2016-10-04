@@ -1,11 +1,10 @@
-package com.microsoft.loop.sampletripsapp.utils;
+package com.microsoft.loop.triptracker.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 /**
  * Created on 6/19/16.

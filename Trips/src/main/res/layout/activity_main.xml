@@ -31,7 +31,7 @@
         android:paddingBottom="20dp"
         android:layout_gravity="bottom">
 
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        <com.microsoft.loop.triptracker.utils.CustomTextView
             android:id="@+id/terms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:textColor="#26ABCD"
             android:textSize="12sp" />
 
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        <com.microsoft.loop.triptracker.utils.CustomTextView
             android:id="@+id/privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:textColor="#26ABCD"
             android:textSize="12sp" />
 
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        <com.microsoft.loop.triptracker.utils.CustomTextView
             android:id="@+id/copyrights"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

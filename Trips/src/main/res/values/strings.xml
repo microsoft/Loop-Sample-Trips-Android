@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trips Tracker</string>
+    <string name="app_name">Trip Tracker</string>
     <string name="trips">TRIPS</string>
     <string name="drives">DRIVES</string>
     <string name="title_activity_maps">Map</string>

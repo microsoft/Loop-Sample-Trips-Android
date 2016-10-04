@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.microsoft.loop.sampletripsapp">
+    package="com.microsoft.loop.triptracker">
 
     <!--
      The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".SampleAppApplication"
+        android:name="com.microsoft.loop.triptracker.SampleAppApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,13 +23,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="all">
         <activity
-            android:name=".SplashActivity"
-            android:label="Trips"
+            android:name="com.microsoft.loop.triptracker.SplashActivity"
+            android:label="Trip Tracker"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,11 +45,11 @@
             android:value="${mapsApiKey}"/>
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.microsoft.loop.triptracker.MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".MainActivity"
+            android:name="com.microsoft.loop.triptracker.MainActivity"
             android:label=""
             android:screenOrientation="portrait" />
 

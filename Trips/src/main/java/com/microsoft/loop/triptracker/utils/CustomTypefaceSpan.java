@@ -1,4 +1,4 @@
-package com.microsoft.loop.sampletripsapp.utils;
+package com.microsoft.loop.triptracker.utils;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;

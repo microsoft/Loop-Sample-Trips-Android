@@ -1,55 +1,22 @@
-[{
-	"entityId": "testtripid1",
-	"annotations": {},
-	"distanceTraveledInKilometers": 4.661534746022072,
-	"endedAt": "2016-07-24T17:13:46.362-07:00",
-	"path": [{
-		"accuracyMeters": 15,
-		"latDegrees": 47.679897,
-		"longDegrees": -122.325165,
-		"timeAt": "2016-07-24T17:07:34.436-07:00",
-		"transportMode": "walking"
-	}, {
-		"accuracyMeters": 9,
-		"altitudeMeters": 68,
-		"latDegrees": 47.68067114,
-		"longDegrees": -122.32427428,
-		"timeAt": "2016-07-24T17:10:34.436-07:00",
-		"transportMode": "driving"
-	}, {
-		"accuracyMeters": 9,
-		"altitudeMeters": 30,
-		"latDegrees": 47.6845423,
-		"longDegrees": -122.33518649,
-		"timeAt": "2016-07-24T17:12:38.026-07:00",
-		"transportMode": "driving"
-	}, {
-		"accuracyMeters": 8,
-		"altitudeMeters": -4,
-		"latDegrees": 47.68504651,
-		"longDegrees": -122.33581851,
-		"timeAt": "2016-07-24T17:13:46.362-07:00",
-		"transportMode": "driving"
-	}],
-	"score": 0,
-	"startLocale": {
-		"country": "United States",
-		"county": "King",
-		"locality": "Seattle",
-		"region": "Washington"
-	},
-	"startedAt": "2016-07-24T17:07:34.436-07:00",
-	"transportMode": "driving",
-	"_portalTestUser": true,
-	"userId": "f5b8158e-47f3-469a-b532-2fe24ba96acc",
-	"deviceId": null,
-	"updatedAt": "2016-07-27T00:45:50.454Z",
-	"createdAt": "2016-07-27T00:45:50.454Z"
-}, {
+[ {
 	"entityId": "testtripid2",
 	"annotations": {},
 	"distanceTraveledInKilometers": 7.979471371620546,
 	"endedAt": "2016-07-24T15:39:34.427-07:00",
+	"startLocale": {
+		"country": "United States",
+		"county": "King",
+		"locality": "Seattle",
+		"region": "Washington",
+		"neighbourhood":"Greenwood"
+	},
+	"endLocale": {
+		"country": "United States",
+		"county": "King",
+		"locality": "Seattle",
+		"region": "Washington",
+		"neighbourhood":"UW District"
+	},
 	"path": [{
 		"accuracyMeters": 15,
 		"latDegrees": 47.687658,
@@ -230,7 +197,7 @@
 	"endLocale": {
 		"country": "United States",
 		"county": "King",
-		"locale": "Seattle",
+		"locality": "Seattle",
 		"region": "Washington"
 	},
 	"endedAt": "2016-07-21T13:04:11.295-07:00",
@@ -273,7 +240,7 @@
 	"startLocale": {
 		"country": "United States",
 		"county": "King",
-		"locale": "Seattle",
+		"locality": "Seattle",
 		"region": "Washington"
 	},
 	"startedAt": "2016-07-21T12:55:08.291-07:00",
@@ -290,7 +257,7 @@
 	"endLocale": {
 		"country": "United States",
 		"county": "King",
-		"locale": "Seattle",
+		"locality": "Seattle",
 		"region": "Washington"
 	},
 	"endedAt": "2016-07-22T12:49:24.456-07:00",
@@ -340,7 +307,7 @@
 	"startLocale": {
 		"country": "United States",
 		"county": "King",
-		"locale": "Seattle",
+		"locality": "Seattle",
 		"region": "Washington"
 	},
 	"startedAt": "2016-07-22T12:38:45.402-07:00",

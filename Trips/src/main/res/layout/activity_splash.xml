@@ -18,22 +18,10 @@
 
         <ImageView android:id="@+id/splashscreen" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/trips_splash"
         android:gravity="center"
         android:scaleType="center"
             android:layout_weight="0.9"/>
-
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TRIP TRACKER"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="21sp"
-            customTextView:fontName="DroidSansMono"
-            android:id="@+id/toolbar_title2"
-            android:paddingTop="10dp"
-            android:layout_below="@+id/splashscreen"/>
 
         </RelativeLayout>
 

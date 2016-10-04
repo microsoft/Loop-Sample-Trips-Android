@@ -1,4 +1,4 @@
-package com.microsoft.loop.sampletripsapp;
+package com.microsoft.loop.triptracker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,17 +18,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
-import com.microsoft.loop.sampletripsapp.utils.TripView;
+import com.microsoft.loop.triptracker.utils.LoopUtils;
+import com.microsoft.loop.triptracker.utils.TripView;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import ms.loop.loopsdk.profile.Drive;
-import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.GeospatialPoint;
 import ms.loop.loopsdk.profile.Trip;
-import ms.loop.loopsdk.profile.Trips;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {

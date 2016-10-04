@@ -1,21 +1,17 @@
-package com.microsoft.loop.sampletripsapp.utils;
+package com.microsoft.loop.triptracker.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.microsoft.loop.sampletripsapp.MainActivity;
-import com.microsoft.loop.sampletripsapp.R;
-import com.microsoft.loop.sampletripsapp.SampleAppApplication;
+import com.microsoft.loop.triptracker.MainActivity;
+import com.microsoft.loop.triptracker.R;
+import com.microsoft.loop.triptracker.SampleAppApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

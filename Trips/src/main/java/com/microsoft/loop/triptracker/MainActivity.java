@@ -1,4 +1,4 @@
-package com.microsoft.loop.sampletripsapp;
+package com.microsoft.loop.triptracker;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,8 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
-import com.microsoft.loop.sampletripsapp.utils.ViewUtils;
+import com.microsoft.loop.triptracker.utils.LoopUtils;
+import com.microsoft.loop.triptracker.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;

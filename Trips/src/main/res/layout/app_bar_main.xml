@@ -22,7 +22,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+        <com.microsoft.loop.triptracker.utils.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TRIP TRACKER"

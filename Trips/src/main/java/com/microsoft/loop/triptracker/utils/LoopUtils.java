@@ -1,7 +1,7 @@
-package com.microsoft.loop.sampletripsapp.utils;
+package com.microsoft.loop.triptracker.utils;
 
 
-import com.microsoft.loop.sampletripsapp.SampleAppApplication;
+import com.microsoft.loop.triptracker.SampleAppApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ms.loop.loopsdk.core.LoopSDK;
-import ms.loop.loopsdk.profile.Drive;
-import ms.loop.loopsdk.profile.Drives;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
 import ms.loop.loopsdk.profile.KnownLocation;

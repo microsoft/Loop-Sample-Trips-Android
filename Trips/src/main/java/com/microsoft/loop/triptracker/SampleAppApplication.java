@@ -1,22 +1,17 @@
-package com.microsoft.loop.sampletripsapp;
+package com.microsoft.loop.triptracker;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDexApplication;
-import android.support.v7.app.AlertDialog;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -28,10 +23,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.microsoft.loop.sampletripsapp.utils.LoopUtils;
+import com.microsoft.loop.triptracker.utils.LoopUtils;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
-import io.fabric.sdk.android.Fabric;
+import org.acra.ACRA;
+import org.acra.ReportField;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.sender.HttpSender;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,18 +38,37 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import ms.loop.loopsdk.core.ILoopSDKCallback;
-import ms.loop.loopsdk.core.ISignalListener;
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.processors.DriveProcessor;
 import ms.loop.loopsdk.processors.KnownLocationProcessor;
 import ms.loop.loopsdk.processors.TripProcessor;
-import ms.loop.loopsdk.profile.KnownLocation;
 import ms.loop.loopsdk.providers.LoopLocationProvider;
-import ms.loop.loopsdk.signal.Signal;
 import ms.loop.loopsdk.signal.SignalConfig;
 import ms.loop.loopsdk.util.LoopError;
 
-
+@ReportsCrashes(
+        formUri = BuildConfig.ACRA_URL,
+        reportType = HttpSender.Type.JSON,
+        httpMethod = HttpSender.Method.POST,
+        formUriBasicAuthLogin = BuildConfig.ACRA_LOGIN,
+        formUriBasicAuthPassword = BuildConfig.ACRA_PWD,
+        customReportContent = {
+                ReportField.APP_VERSION_CODE,
+                ReportField.APP_VERSION_NAME,
+                ReportField.ANDROID_VERSION,
+                ReportField.PACKAGE_NAME,
+                ReportField.REPORT_ID,
+                ReportField.BUILD,
+                ReportField.STACK_TRACE,
+                ReportField.USER_APP_START_DATE,
+                ReportField.USER_CRASH_DATE,
+                ReportField.CUSTOM_DATA,
+                ReportField.INSTALLATION_ID,
+                ReportField.DEVICE_ID,
+                ReportField.STACK_TRACE_HASH,
+        },
+        mode = ReportingInteractionMode.SILENT
+)
 public class SampleAppApplication extends MultiDexApplication implements ILoopSDKCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = SampleAppApplication.class.getSimpleName();
@@ -73,7 +91,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
     public void onCreate() {
         super.onCreate();
         instance = this;
-
+        ACRA.init(this);
         if (isLoopEnabled()) {
             initializeLoopSDK();
         }
@@ -131,7 +149,7 @@ public class SampleAppApplication extends MultiDexApplication implements ILoopSD
         sdkInitialized = true;
 
         LoopUtils.initialize();
-        //LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
+        LoopSDK.enableLogging("loggly", BuildConfig.LOGGLY_TOKEN);
 
         // send intent to activity to update
         Intent intent = new Intent("android.intent.action.onInitialized").putExtra("status", "initialized");

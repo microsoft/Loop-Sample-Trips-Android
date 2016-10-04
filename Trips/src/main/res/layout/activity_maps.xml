@@ -74,7 +74,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="5"/>
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_from"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                         android:ellipsize="end"
                         android:layout_weight="30"/>
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_from2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="5"/>
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                         android:layout_weight="10"/>
                 </LinearLayout>
 
-                <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                <com.microsoft.loop.triptracker.utils.CustomTextView
                     android:id="@+id/drive_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
                     android:textSize="12sp"
                     android:alpha="0.54" />
 
-                <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                <com.microsoft.loop.triptracker.utils.CustomTextView
                     android:id="@+id/sample_trip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                 android:gravity="top"
                 android:layout_weight="50">
 
-                <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                <com.microsoft.loop.triptracker.utils.CustomTextView
                     android:id="@+id/drive_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -247,7 +247,7 @@
                         android:paddingRight="5dp"
                         android:layout_gravity="center_vertical"/>
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_duration_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
                         android:textColor="#1E1E1E"
                         android:textSize="10sp" />
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_duration_min"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                         android:textColor="#1E1E1E"
                         android:textSize="10sp" />
 
-                    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+                    <com.microsoft.loop.triptracker.utils.CustomTextView
                         android:id="@+id/drive_duration_sec"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

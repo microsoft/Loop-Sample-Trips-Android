@@ -4,7 +4,7 @@
     xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
     android:orientation="vertical">
 
-    <com.microsoft.loop.sampletripsapp.utils.CustomTextView
+    <com.microsoft.loop.triptracker.utils.CustomTextView
         android:id="@+id/customdialogcontent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
