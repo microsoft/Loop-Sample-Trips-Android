@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+       <!-- <item
+            android:id="@+id/nav_drives"
+            android:icon="@drawable/ic_drives_on"
+            android:title="@string/drives"
+            android:actionMenuTextColor="@color/action_menu_selected_color"
+            android:itemTextAppearance="@style/myCustomMenuTextApearance"
+            android:textSize="38sp"/>-->
+        <item
+            android:id="@+id/nav_trips"
+            android:icon="@drawable/ic_trips_on"
+            android:title="@string/trips"
+            android:actionMenuTextColor="@color/action_menu_selected_color"
+            android:textSize="38sp"/>
+
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/helpusimprove"
+            android:title="@string/helpusimprove"
+            android:icon="@drawable/ic_trash"
+            android:checked="true"
+            android:actionMenuTextColor="@color/action_menu_unselected_color"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/nav_version"
+            android:title="@string/about"
+            android:icon="@drawable/ic_app_menu_icon"
+            android:actionMenuTextColor="@color/action_menu_unselected_color"
+            android:textSize="38sp"/>
+    </group>
+
+    <!--<group
+        android:id="@+id/group_helpusimprove"
+        android:checkableBehavior="single">
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/helpusimprove"
+            android:title="@string/helpusimprove"
+            android:checked="true"
+            android:actionMenuTextColor="@color/action_menu_unselected_color"
+            app:actionLayout="@layout/menu_switch"
+            app:showAsAction="always" />
+    </group>-->
+</menu>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/splash_background"
+    tools:ignore="all">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:weightSum="1"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <ImageView android:id="@+id/splashscreen" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/trips_splash"
+        android:gravity="center"
+        android:scaleType="center"
+            android:layout_weight="0.9"/>
+
+        </RelativeLayout>
+
+
+</LinearLayout>

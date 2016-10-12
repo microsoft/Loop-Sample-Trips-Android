@@ -1,0 +1,1 @@
+This app will send crash data to Microsoft as part of its standard functionality. For more information about privacy at Microsoft, please access the privacy policy available at the following URL. https://privacy.microsoft.com/en-us/privacystatement.

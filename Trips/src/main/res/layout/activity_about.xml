@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".AboutActivity"
+    tools:ignore="all">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="start"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="7"
+            android:id="@+id/action_back_ic"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_navigation_back"
+                android:contentDescription="@string/back_to_main"
+                android:id="@+id/about_activity_back"/>
+            </LinearLayout>>
+
+            <com.microsoft.loop.triptracker.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:layout_gravity="center"
+                android:text="LEARN MORE"
+                android:textColor="#000"
+                android:gravity="center"
+                android:textSize="19sp"
+                customTextView:fontName="Roboto-Regular" />
+
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_about" />
+
+</android.support.design.widget.CoordinatorLayout>

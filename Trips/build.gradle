@@ -1,0 +1,95 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+apply plugin: 'com.android.application'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+def mapsApiKey = TRIPTRACKER_APP_MAPS_KEY_PROP?: "";
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.microsoft.loop.triptracker"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1010
+        versionName "1.0.5"
+        multiDexEnabled true
+
+        buildConfigField 'String', 'APP_ID', '\"' + TRIPTRACKER_APP_ID_PROP + '\"'
+        buildConfigField 'String', 'APP_TOKEN', '\"' + TRIPTRACKER_APP_TOKEN_PROP + '\"'
+        buildConfigField 'String', 'LOGGLY_TOKEN', '\"' + LOGGLY_TOKEN + '\"'
+        buildConfigField 'String', 'MIXPANEL_TOKEN', '\"' + TRIPTRACKER_MIXPANEL_TOKEN + '\"'
+        manifestPlaceholders = [ mapsApiKey:mapsApiKey]
+
+        buildConfigField "String", "ACRA_URL", '\"' + ACRA_URL_PROP + '\"'
+        buildConfigField "String", "ACRA_PWD", '\"' + ACRA_PWD_PROP + '\"'
+        buildConfigField "String", "ACRA_LOGIN", '\"' + ACRA_LOGIN_PROP + '\"'
+    }
+    dexOptions {
+        dexInProcess = false
+        javaMaxHeapSize "2g"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    lintOptions {
+        // set to true to turn off analysis progress reporting by lint
+        quiet false
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings false
+        // project specific lint options
+        lintConfig new File(rootProject.projectDir, "lint.xml")
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace(".apk", ".apk"))
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile('ms.loop:loopsdk:2.0.2') { changing = true }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+        transitive = true;
+    }
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.android.gms:play-services:9.4.0'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.mixpanel.android:mixpanel-android:4.9.2'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'ch.acra:acra:4.6.2'
+}

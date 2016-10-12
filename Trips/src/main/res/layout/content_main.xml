@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:customTextView="https://schemas.android.com/apk/res/com.microsoft.loop.sampletripsapp.utils"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:ignore="all"
+    tools:showIn="@layout/app_bar_main">
+
+    <RelativeLayout
+        android:id="@+id/locationsettingcontainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/locationstrackingcontainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_centerVertical="true">
+
+            <com.microsoft.loop.triptracker.utils.CustomTextView
+                android:id="@+id/txtlocationtracking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="3dp"
+                android:text="TRIPS RECORDING"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                customTextView:fontName="DroidSansMono" />
+
+            <Switch
+                android:id="@+id/locationswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="" />
+
+            <com.microsoft.loop.triptracker.utils.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start moving and LOOP will auto-track your trips"
+                android:textSize="12sp"
+                customTextView:fontName="DroidSansMono"
+                android:layout_below="@+id/locationswitch"
+                android:id="@+id/title_description"
+                android:paddingLeft="5dp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/dashed_line_angle"
+            android:layout_below="@+id/locationstrackingcontainer"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tripslist_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_below="@+id/locationsettingcontainer">
+
+        <ListView
+            android:id="@+id/tripslist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/dashed"
+            android:dividerHeight="2dp"
+            android:layerType="software"
+            android:listSelector="@color/colorPrimary"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:scrollbars="none" />
+    </RelativeLayout>
+
+</RelativeLayout>

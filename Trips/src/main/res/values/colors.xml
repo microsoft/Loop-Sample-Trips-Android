@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryLight">#E4E4E4</color>
+    <color name="colorPrimaryDark">#19000000</color>
+    <color name="action_menu_selected_color">#26ABCD</color>
+    <color name="action_menu_unselected_color">#E9E9E9</color>
+    <color name="splash_background">#E7E7E7</color>
+    <color name="drawerIcon">#26ABCD</color>
+    <color name="mappath">#4D000000</color>
+    <color name="mappathcircle">#33000000</color>
+    <color name="trackingoffcolor">#CD4E26</color>
+</resources>

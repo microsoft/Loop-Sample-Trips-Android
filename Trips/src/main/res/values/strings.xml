@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Trip Tracker</string>
+    <string name="trips">TRIPS</string>
+    <string name="drives">DRIVES</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="trips_recording_on">TRIP RECORDING ON</string>
+    <string name="trips_recording_off">TRIP RECORDING OFF</string>
+    <string name="delete_drive">Delete Drive</string>
+    <string name="back_to_main">Back to main view</string>
+    <string name="about">LEARN MORE</string>
+    <string name="helpusimprove">DELETE ALL TRIPS</string>
+    <string name="title_activity_about">Learn More</string>
+
+</resources>
