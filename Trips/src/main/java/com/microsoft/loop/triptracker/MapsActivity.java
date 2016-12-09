@@ -111,7 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         tripView.update(this, trip, true);
 
-        GeospatialPoint firstPoint = trip.path.points.get(0);
+        GeospatialPoint firstPoint = trip.path.get(0);
 
         PolylineOptions options = new PolylineOptions()
                 .add(new LatLng(firstPoint.latDegrees,firstPoint.longDegrees))
@@ -128,7 +128,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker.showInfoWindow();
         selectedMarker = marker;
         LatLng latLng = new LatLng(firstPoint.latDegrees, firstPoint.longDegrees);
-        for (GeospatialPoint point: trip.path.points)
+        for (GeospatialPoint point: trip.path)
         {
             latLng = new LatLng(point.latDegrees,point.longDegrees);
             mMap.addCircle(new CircleOptions()

@@ -1,6 +1,9 @@
 package com.microsoft.loop.triptracker.utils;
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.microsoft.loop.triptracker.SampleAppApplication;
 
 import org.json.JSONArray;
@@ -15,12 +18,14 @@ import java.util.List;
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
+import ms.loop.loopsdk.profile.ItemDownloadOptions;
 import ms.loop.loopsdk.profile.KnownLocation;
 import ms.loop.loopsdk.profile.Locations;
 import ms.loop.loopsdk.profile.Trip;
 import ms.loop.loopsdk.profile.Trips;
 import ms.loop.loopsdk.providers.LoopLocationProvider;
 import ms.loop.loopsdk.signal.SignalConfig;
+import ms.loop.loopsdk.util.JSONHelper;
 import ms.loop.loopsdk.util.LoopError;
 
 public class LoopUtils {
@@ -82,7 +87,7 @@ public class LoopUtils {
             callback.onProfileDownloadFailed(new LoopError("Loop not initialized"));
             return;
         }
-        localTrips.download(true, new IProfileDownloadCallback() {
+        localTrips.download(ItemDownloadOptions.AllItems, new IProfileDownloadCallback() {
             @Override
             public void onProfileDownloadComplete(int itemCount) {
 
@@ -131,14 +136,16 @@ public class LoopUtils {
             boolean sampleTripsLoaded = SampleAppApplication.instance.getBooleanSharedPrefValue("sample_trips_loaded", false);
             if(sampleTripsLoaded) return;
 
-            JSONArray jsonArray = new JSONArray(loadJSONFromAsset("sample_trips.json"));
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                localTrips.createAndAddItem(jsonObject);
+            final Gson gson = JSONHelper.createLoopGson();
+            JsonArray jsonArray = gson.fromJson(loadJSONFromAsset("sample_trips.json"), JsonArray.class);
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = (JsonObject) jsonArray.get(i);
+                localTrips.addOrReplaceItem(gson.fromJson(jsonObject, Trip.class));
             }
             SampleAppApplication.instance.setSharedPrefValue("sample_trips_loaded", true);
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -19,9 +19,9 @@ android {
     defaultConfig {
         applicationId "com.microsoft.loop.triptracker"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 1010
-        versionName "1.0.5"
+        targetSdkVersion 23
+        versionCode 1011
+        versionName "1.0.6"
         multiDexEnabled true
 
         buildConfigField 'String', 'APP_ID', '\"' + TRIPTRACKER_APP_ID_PROP + '\"'
@@ -46,8 +46,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -77,7 +77,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile('ms.loop:loopsdk:2.0.2') { changing = true }
+    compile('ms.loop:loopsdk:2.1.0') { changing = true }
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }

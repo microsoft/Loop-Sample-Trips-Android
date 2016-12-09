@@ -32,7 +32,8 @@ import com.microsoft.loop.triptracker.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import ms.loop.loopsdk.core.ILoopServiceCallback;
+
+import ms.loop.loopsdk.api.ILoopApiCallback;
 import ms.loop.loopsdk.core.LoopSDK;
 import ms.loop.loopsdk.profile.IProfileDownloadCallback;
 import ms.loop.loopsdk.profile.IProfileItemChangedCallback;
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     private static String Loop_URL = "https://www.loop.ms/";
-    private static String TOU_URL = "http://go.microsoft.com/fwlink/?LinkID=530144";
-    private static String PRIVACY_URL = "http://go.microsoft.com/fwlink/?LinkId=521839";
+    private static String TOU_URL = "https://go.microsoft.com/fwlink/?LinkID=530144";
+    private static String PRIVACY_URL = "https://go.microsoft.com/fwlink/?LinkId=521839";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        LoopSDK.deleteUser(new ILoopServiceCallback<Void>() {
+                        LoopSDK.deleteUser(new ILoopApiCallback<Void>() {
                             @Override
                             public void onSuccess(Void value) {
                                 LoopUtils.deleteItems();
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity
 
     public void loadDrivesAndTrips() {
         checkTrackingEnabled();
-        if (LoopUtils.getTrips().size() > 0 || !LoopSDK.isInitialized() || TextUtils.isEmpty(LoopSDK.userId)) {
+        if (LoopUtils.getTrips().size() > 0 || !LoopSDK.isInitialized()) {
             updateTripsInUI();
             return;
         }
