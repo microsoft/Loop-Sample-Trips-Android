@@ -9,17 +9,16 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-def mapsApiKey = TRIPTRACKER_APP_MAPS_KEY_PROP?: "";
+def mapsApiKey = TRIPTRACKER_APP_MAPS_KEY_PROP?: ""
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.microsoft.loop.triptracker"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 28
         versionCode 1011
         versionName "1.0.6"
         multiDexEnabled true
@@ -66,30 +65,32 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", ".apk"))
+            def relativeRootDir = output.packageApplication.outputDirectory.toPath()
+                    .relativize(rootDir.toPath()).toFile()
+            output.outputFileName = new File(
+                    "$relativeRootDir/release",
+                    output.outputFile.name)
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
 
-    compile('ms.loop:loopsdk:2.1.0') { changing = true }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
-        transitive = true;
+    implementation('ms.loop:loopsdk:2.1.0') { changing = true }
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+        transitive = true
     }
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.google.android.gms:play-services:9.4.0'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.squareup.okhttp3:okhttp:3.3.1'
-    compile 'com.mixpanel.android:mixpanel-android:4.9.2'
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
-    compile 'com.google.android.gms:play-services-auth:9.4.0'
-    compile 'com.google.android.gms:play-services-gcm:9.4.0'
-    compile 'ch.acra:acra:4.6.2'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.mixpanel.android:mixpanel-android:4.9.2'
+    implementation 'com.google.android.gms:play-services-ads:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.google.android.gms:play-services-gcm:16.0.0'
+    implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'ch.acra:acra:4.6.2'
 }
